@@ -2354,29 +2354,29 @@ public class Game extends GameShell {
 				}
 			}
 			while (buffer.bitOffset + 21 < i * 8) {
-				int i_211_ = buffer.getBits(14);
-				if (i_211_ == 16383) {
+				int idx = buffer.getBits(14);
+				if (idx == 16383) {
 					break;
 				}
-				if (localNpcs[i_211_] == null) {
-					localNpcs[i_211_] = new Npc();
+				if (localNpcs[idx] == null) {
+					localNpcs[idx] = new Npc();
 				}
-				Npc npc = localNpcs[i_211_];
-				anIntArray862[actorCount++] = i_211_;
+				Npc npc = localNpcs[idx];
+				anIntArray862[actorCount++] = idx;
 				npc.anInt1557 = Game.currentCycle;
-				int i_212_ = buffer.getBits(5);
-				if (i_212_ > 15) {
-					i_212_ -= 32;
+				int offsetY = buffer.getBits(5);
+				if (offsetY > 15) {
+					offsetY -= 32;
 				}
-				int i_213_ = buffer.getBits(5);
-				if (i_213_ > 15) {
-					i_213_ -= 32;
+				int offsetX = buffer.getBits(5);
+				if (offsetX > 15) {
+					offsetX -= 32;
 				}
 				buffer.getBits(1);
 				npc.npcDefinition = ActorDefinition.getDefinition(buffer.getBits(12));
 				int i_215_ = buffer.getBits(1);
 				if (i_215_ == 1) {
-					anIntArray919[anInt918++] = i_211_;
+					anIntArray919[anInt918++] = idx;
 				}
 				npc.boundaryDimension = npc.npcDefinition.boundaryDimension;
 				npc.anInt1524 = npc.npcDefinition.degreesToTurn;
@@ -2385,7 +2385,7 @@ public class Game extends GameShell {
 				npc.turnRightAnimationId = npc.npcDefinition.turnRightAnimationId;
 				npc.turnLeftAnimationId = npc.npcDefinition.turnLeftAnimationId;
 				npc.standAnimationId = npc.npcDefinition.standAnimationId;
-				npc.setPosition(Game.localPlayer.pathX[0] + i_213_, Game.localPlayer.pathY[0] + i_212_);
+				npc.setPosition(Game.localPlayer.pathX[0] + offsetX, Game.localPlayer.pathY[0] + offsetY);
 			}
 			buffer.finishBitAccess();
 		} catch (RuntimeException runtimeexception) {
