@@ -614,14 +614,14 @@ public class Game extends GameShell {
 						int chatboxMessageType = chatboxMessageTypes[chatboxMessage];
 						int i_14_ = 70 - i * 14 + anInt1114;
 						String chatboxMessageName = chatboxMessageNames[chatboxMessage];
-						int playerRights = 0;
-						if (chatboxMessageName != null && chatboxMessageName.startsWith("@cr1@")) {
+						int playerRights = Player.Rights.PLAYER.getLevel();
+						if (chatboxMessageName != null && chatboxMessageName.startsWith(Player.Rights.MODERATOR.getCrownText())) {
 							chatboxMessageName = chatboxMessageName.substring(5);
-							playerRights = 1;
+							playerRights = Player.Rights.MODERATOR.getLevel();
 						}
-						if (chatboxMessageName != null && chatboxMessageName.startsWith("@cr2@")) {
+						if (chatboxMessageName != null && chatboxMessageName.startsWith(Player.Rights.ADMIN.getCrownText())) {
 							chatboxMessageName = chatboxMessageName.substring(5);
-							playerRights = 2;
+							playerRights = Player.Rights.ADMIN.getLevel();
 						}
 						if (chatboxMessageType == 0) {
 							if (i_14_ > 0 && i_14_ < 110) {
@@ -634,11 +634,11 @@ public class Game extends GameShell {
 										&& method109(false, chatboxMessageName))) {
 							if (i_14_ > 0 && i_14_ < 110) {
 								int i_16_ = 4;
-								if (playerRights == 1) {
+								if (playerRights == Player.Rights.MODERATOR.getLevel()) {
 									moderatorIcon[0].drawImage(i_16_, i_14_ - 12);
 									i_16_ += 14;
 								}
-								if (playerRights == 2) {
+								if (playerRights == Player.Rights.ADMIN.getLevel()) {
 									moderatorIcon[1].drawImage(i_16_, i_14_ - 12);
 									i_16_ += 14;
 								}
@@ -656,11 +656,11 @@ public class Game extends GameShell {
 								int i_17_ = 4;
 								typeFace.drawString("From", i_17_, i_14_, 0);
 								i_17_ += typeFace.getStringEffectWidth("From ");
-								if (playerRights == 1) {
+								if (playerRights == Player.Rights.MODERATOR.getLevel()) {
 									moderatorIcon[0].drawImage(i_17_, i_14_ - 12);
 									i_17_ += 14;
 								}
-								if (playerRights == 2) {
+								if (playerRights == Player.Rights.ADMIN.getLevel()) {
 									moderatorIcon[1].drawImage(i_17_, i_14_ - 12);
 									i_17_ += 14;
 								}
@@ -5255,7 +5255,7 @@ public class Game extends GameShell {
 						redrawChatbox = true;
 					}
 					if ((key == KeyEvent.VK_ENTER) && chatboxInput.length() > 0) {
-						if (playerRights == 0) {
+						if (playerRights == Player.Rights.PLAYER.getLevel()) {
 							if (chatboxInput.equals("::clientdrop")) {
 								method68(-670);
 							}
@@ -5357,10 +5357,10 @@ public class Game extends GameShell {
 							Game.localPlayer.chatColor = i_421_;
 							Game.localPlayer.chatEffect = i_422_;
 							Game.localPlayer.anInt1555 = 150;
-							if (playerRights == 2) {
-								sendMessage(Game.localPlayer.forcedChat, 2, "@cr2@" + Game.localPlayer.playerName);
-							} else if (playerRights == 1) {
-								sendMessage(Game.localPlayer.forcedChat, 2, "@cr1@" + Game.localPlayer.playerName);
+							if (playerRights == Player.Rights.ADMIN.getLevel()) {
+								sendMessage(Game.localPlayer.forcedChat, 2, Player.Rights.ADMIN.getCrownText() + Game.localPlayer.playerName);
+							} else if (playerRights == Player.Rights.MODERATOR.getLevel()) {
+								sendMessage(Game.localPlayer.forcedChat, 2, Player.Rights.MODERATOR.getCrownText() + Game.localPlayer.playerName);
 							} else {
 								sendMessage(Game.localPlayer.forcedChat, 2, Game.localPlayer.playerName);
 							}
@@ -5395,10 +5395,10 @@ public class Game extends GameShell {
 						break;
 					}
 					String name = chatboxMessageNames[i_427_];
-					if (name != null && name.startsWith("@cr1@")) {
+					if (name != null && name.startsWith(Player.Rights.MODERATOR.getCrownText())) {
 						name = name.substring(5);
 					}
-					if (name != null && name.startsWith("@cr2@")) {
+					if (name != null && name.startsWith(Player.Rights.ADMIN.getCrownText())) {
 						name = name.substring(5);
 					}
 					if (i_428_ == 0) {
@@ -5408,7 +5408,7 @@ public class Game extends GameShell {
 							&& (i_428_ == 1 || publicChatSetting == 0 || publicChatSetting == 1
 									&& method109(false, name))) {
 						if (i_424_ > i_429_ - 14 && i_424_ <= i_429_ && !name.equals(Game.localPlayer.playerName)) {
-							if (playerRights >= 1) {
+							if (playerRights >= Player.Rights.MODERATOR.getLevel()) {
 								menuActionNames[menuActionRow] = "Report abuse @whi@" + name;
 								menuActionIds[menuActionRow] = 606;
 								menuActionRow++;
@@ -5427,7 +5427,7 @@ public class Game extends GameShell {
 							&& (i_428_ == 7 || privateChatSetting == 0 || privateChatSetting == 1
 									&& method109(false, name))) {
 						if (i_424_ > i_429_ - 14 && i_424_ <= i_429_) {
-							if (playerRights >= 1) {
+							if (playerRights >= Player.Rights.MODERATOR.getLevel()) {
 								menuActionNames[menuActionRow] = "Report abuse @whi@" + name;
 								menuActionIds[menuActionRow] = 606;
 								menuActionRow++;
@@ -5624,7 +5624,7 @@ public class Game extends GameShell {
 					}
 				} else {
 					if (type == 613) {
-						if (playerRights >= 1) {
+						if (playerRights >= Player.Rights.MODERATOR.getLevel()) {
 							if (reportMutePlayer) {
 								widget.disabledColor = 0xFF0000;
 								widget.disabledText = "Moderator option: Mute player for 48 hours: <ON>";
@@ -8623,7 +8623,7 @@ public class Game extends GameShell {
 					if (player.playerName != null && player.visibile) {
 						long l = TextUtils.nameToLong(player.playerName);
 						boolean bool = false;
-						if (playerRights <= 1) {
+						if (playerRights <= Player.Rights.MODERATOR.getLevel()) {
 							for (int i_691_ = 0; i_691_ < ignoreListCount; i_691_++) {
 								if (ignoreList[i_691_] == l) {
 									bool = true;
@@ -8642,10 +8642,11 @@ public class Game extends GameShell {
 								player.chatColor = chatEffects >> 8;
 								player.chatEffect = chatEffects & 0xff;
 								player.anInt1555 = 150;
-								if (playerRights == 2 || playerRights == 3) {
-									sendMessage(forcedChat, 1, "@cr2@" + player.playerName);
-								} else if (playerRights == 1) {
-									sendMessage(forcedChat, 1, "@cr1@" + player.playerName);
+								if (playerRights == Player.Rights.ADMIN.getLevel()
+                                        || playerRights == Player.Rights.OWNER.getLevel()) {
+									sendMessage(forcedChat, 1, Player.Rights.ADMIN.getCrownText() + player.playerName);
+								} else if (playerRights == Player.Rights.MODERATOR.getLevel()) {
+									sendMessage(forcedChat, 1, Player.Rights.MODERATOR.getCrownText() + player.playerName);
 								} else {
 									sendMessage(forcedChat, 2, player.playerName);
 								}
@@ -9752,7 +9753,8 @@ public class Game extends GameShell {
 						int messageType = chatboxMessageTypes[i];
 						String name = chatboxMessageNames[i];
 						if (name != null) {
-							if (name.startsWith("@cr1@") || name.startsWith("@cr2@")) {
+							if (name.startsWith(Player.Rights.MODERATOR.getCrownText())
+                                    || name.startsWith(Player.Rights.ADMIN.getCrownText())) {
 								name = name.substring(5);
 							}
 						}
@@ -9767,7 +9769,7 @@ public class Game extends GameShell {
 									areaWidth = 450;
 								}
 								if (mouseEventX < 4 + areaWidth) {
-									if (playerRights >= 1) {
+									if (playerRights >= Player.Rights.MODERATOR.getLevel()) {
 										menuActionNames[menuActionRow] = "Report abuse @whi@" + name;
 										menuActionIds[menuActionRow] = 2606;
 										menuActionRow++;
@@ -11587,7 +11589,7 @@ public class Game extends GameShell {
 							break;
 						}
 					}
-					if (senderPlayerRights <= 1) {
+					if (senderPlayerRights <= Player.Rights.MODERATOR.getLevel()) {
 						for (int i_1136_ = 0; i_1136_ < ignoreListCount; i_1136_++) {
 							if (ignoreList[i_1136_] == nameLong) {
 								bool_1134_ = true;
@@ -11600,13 +11602,14 @@ public class Game extends GameShell {
 							anIntArray1265[anInt1194] = i_1132_;
 							anInt1194 = (anInt1194 + 1) % 100;
 							String string = ChatEncoder.get(packetSize - 13, inBuffer);
-							if (senderPlayerRights != 3) {
+							if (senderPlayerRights != Player.Rights.OWNER.getLevel()) {
 								string = ChatCensor.censorString(string);
 							}
-							if (senderPlayerRights == 2 || senderPlayerRights == 3) {
-								sendMessage(string, 7, "@cr2@" + TextUtils.formatName(TextUtils.longToName(nameLong)));
-							} else if (senderPlayerRights == 1) {
-								sendMessage(string, 7, "@cr1@" + TextUtils.formatName(TextUtils.longToName(nameLong)));
+							if (senderPlayerRights == Player.Rights.ADMIN.getLevel()
+                                    || senderPlayerRights == Player.Rights.OWNER.getLevel()) {
+								sendMessage(string, 7, Player.Rights.ADMIN.getCrownText() + TextUtils.formatName(TextUtils.longToName(nameLong)));
+							} else if (senderPlayerRights == Player.Rights.MODERATOR.getLevel()) {
+								sendMessage(string, 7, Player.Rights.MODERATOR.getCrownText() + TextUtils.formatName(TextUtils.longToName(nameLong)));
 							} else {
 								sendMessage(string, 3, TextUtils.formatName(TextUtils.longToName(nameLong)));
 							}

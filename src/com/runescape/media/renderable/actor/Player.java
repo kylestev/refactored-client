@@ -40,6 +40,29 @@ public class Player extends Actor {
 	public int anInt1742;
 	public int anInt1743;
 
+    public enum Rights {
+        PLAYER(0, ""),
+        MODERATOR(1, "@cr1@"),
+        ADMIN(2, "@cr2@"),
+        OWNER(3, "@cr2@");
+
+        private final int level;
+        private final String crownText;
+
+        Rights(final int level, final String crownText) {
+            this.level = level;
+            this.crownText = crownText;
+        }
+
+        public int getLevel() {
+            return this.level;
+        }
+
+        public String getCrownText() {
+            return this.crownText;
+        }
+    }
+
 	@Override
 	public final Model getRotatedModel() {
 		if (!visibile) {
