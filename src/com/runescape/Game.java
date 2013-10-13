@@ -7321,74 +7321,80 @@ public class Game extends GameShell {
 	}
 
 	public final void processClickingMinimap() {
-		do {
-			try {
-				if (minimapState == 0) {
-					if (clickType != 1) {
-						break;
-					}
-					int i = clickX - 25 - 550;
-					int i_584_ = clickY - 5 - 4;
-					if (i >= 0 && i_584_ >= 0 && i < 146 && i_584_ < 151) {
-						i -= 73;
-						i_584_ -= 75;
-						int i_585_ = anInt1210 + anInt1234 & 0x7ff;
-						int i_586_ = Rasterizer3D.SINE[i_585_];
-						int i_587_ = Rasterizer3D.COSINE[i_585_];
-						i_586_ = i_586_ * (anInt1195 + 256) >> 8;
-						i_587_ = i_587_ * (anInt1195 + 256) >> 8;
-						int i_588_ = i_584_ * i_586_ + i * i_587_ >> 11;
-						int i_589_ = i_584_ * i_587_ - i * i_586_ >> 11;
-						int i_590_ = Game.localPlayer.xWithBoundary + i_588_ >> 7;
-						int i_591_ = Game.localPlayer.yWithBoundary - i_589_ >> 7;
-						boolean bool_592_ = calculatePath(1, 0, 0, 0, Game.localPlayer.pathY[0], 0, 0, i_591_,
-								Game.localPlayer.pathX[0], true, i_590_);
-						if (bool_592_) {
-							outBuffer.put(i);
-							outBuffer.put(i_584_);
-							outBuffer.putShort(anInt1210);
-							outBuffer.put(57);
-							outBuffer.put(anInt1234);
-							outBuffer.put(anInt1195);
-							outBuffer.put(89);
-							outBuffer.putShort(Game.localPlayer.xWithBoundary);
-							outBuffer.putShort(Game.localPlayer.yWithBoundary);
-							outBuffer.put(arbitraryDestination);
-							outBuffer.put(63);
-						}
-					}
-					Game.anInt1142++;
-					if (Game.anInt1142 <= 1151) {
-						break;
-					}
-					Game.anInt1142 = 0;
-					outBuffer.putOpcode(246);
-					outBuffer.put(0);
-					int i_593_ = outBuffer.offset;
-					if ((int) (Math.random() * 2.0) == 0) {
-						outBuffer.put(101);
-					}
-					outBuffer.put(197);
-					outBuffer.putShort((int) (Math.random() * 65536.0));
-					outBuffer.put((int) (Math.random() * 256.0));
-					outBuffer.put(67);
-					outBuffer.putShort(14214);
-					if ((int) (Math.random() * 2.0) == 0) {
-						outBuffer.putShort(29487);
-					}
-					outBuffer.putShort((int) (Math.random() * 65536.0));
-					if ((int) (Math.random() * 2.0) == 0) {
-						outBuffer.put(220);
-					}
-					outBuffer.put(180);
-					outBuffer.putSizeByte(outBuffer.offset - i_593_);
-				}
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("13593, " + runtimeexception.toString());
-				throw new RuntimeException();
-			}
-			break;
-		} while (false);
+        try {
+            if (minimapState == 0) {
+                if (clickType != 1) {
+                    return;
+                }
+                int _clickX = clickX - 25 - 550;
+                int _clickY = clickY - 5 - 4;
+                // TODO: refactor into a Rectangle
+                if (_clickX >= 0 && _clickY >= 0 && _clickX < 146 && _clickY < 151) {
+                    _clickX -= 73;
+                    _clickY -= 75;
+                    final int mapRotation = anInt1210 + anInt1234 & 0x7ff;
+                    final int mapY = Rasterizer3D.SINE[mapRotation] * (anInt1195 + 256) >> 8;
+                    final int mapX = Rasterizer3D.COSINE[mapRotation] * (anInt1195 + 256) >> 8;
+                    final int offsetX = _clickY * mapY + _clickX * mapX >> 11;
+                    final int offsetY = _clickY * mapX - _clickX * mapY >> 11;
+                    final int toLocalX = Game.localPlayer.xWithBoundary + offsetX >> 7;
+                    final int toLocalY = Game.localPlayer.yWithBoundary - offsetY >> 7;
+
+                    boolean canReach = calculatePath(1, 0, 0, 0, Game.localPlayer.pathY[0], 0, 0, toLocalY,
+                            Game.localPlayer.pathX[0], true, toLocalX);
+
+                    if (canReach) {
+                        outBuffer.put(_clickX);
+                        outBuffer.put(_clickY);
+                        outBuffer.putShort(anInt1210);
+                        outBuffer.put(57);
+                        outBuffer.put(anInt1234);
+                        outBuffer.put(anInt1195);
+                        outBuffer.put(89);
+                        outBuffer.putShort(Game.localPlayer.xWithBoundary);
+                        outBuffer.putShort(Game.localPlayer.yWithBoundary);
+                        outBuffer.put(arbitraryDestination);
+                        outBuffer.put(63);
+                    }
+                }
+
+                if (++Game.anInt1142 <= 1151) {
+                    return;
+                }
+
+                Game.anInt1142 = 0;
+                outBuffer.putOpcode(246);
+                outBuffer.put(0);
+
+                final int bufferOffset = outBuffer.offset;
+
+                if (Math.random() < 0.5d) {
+                    outBuffer.put(101);
+                }
+
+                outBuffer.put(197);
+                outBuffer.putShort((int) (Math.random() * 65536.0));
+                outBuffer.put((int) (Math.random() * 256.0));
+                outBuffer.put(67);
+                outBuffer.putShort(14214);
+
+                if (Math.random() < 0.5d) {
+                    outBuffer.putShort(29487);
+                }
+
+                outBuffer.putShort((int) (Math.random() * 65536.0));
+
+                if (Math.random() < 0.5d) {
+                    outBuffer.put(220);
+                }
+
+                outBuffer.put(180);
+                outBuffer.putSizeByte(outBuffer.offset - bufferOffset);
+            }
+        } catch (RuntimeException runtimeexception) {
+            SignLink.reportError("13593, " + runtimeexception.toString());
+            throw new RuntimeException();
+        }
 	}
 
 	public final String method93(int i, int i_594_) {
