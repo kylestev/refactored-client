@@ -198,7 +198,7 @@ public class Player extends Actor {
 	private final Model getAnimatedModel() {
 		if (npcDefinition != null) {
 			int i_11_ = -1;
-			if (animation >= 0 && aniomationDelay == 0) {
+			if (animation >= 0 && animationDelay == 0) {
 				i_11_ = AnimationSequence.cache[animation].frame2Ids[anInt1547];
 			} else if (anInt1537 >= 0) {
 				i_11_ = AnimationSequence.cache[anInt1537].frame2Ids[anInt1538];
@@ -211,7 +211,7 @@ public class Player extends Actor {
 		int i_13_ = -1;
 		int i_14_ = -1;
 		int i_15_ = -1;
-		if (animation >= 0 && aniomationDelay == 0) {
+		if (animation >= 0 && animationDelay == 0) {
 			AnimationSequence animationsequence = AnimationSequence.cache[animation];
 			i_12_ = animationsequence.frame2Ids[anInt1547];
 			if (anInt1537 >= 0 && anInt1537 != standAnimationId) {

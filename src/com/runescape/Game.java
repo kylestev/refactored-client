@@ -6567,7 +6567,7 @@ public class Game extends GameShell {
 						if (i_517_ == 1) {
 							npc.anInt1547 = 0;
 							npc.anInt1548 = 0;
-							npc.aniomationDelay = i_516_;
+							npc.animationDelay = i_516_;
 							npc.anInt1550 = 0;
 						}
 						if (i_517_ == 2) {
@@ -6579,7 +6579,7 @@ public class Game extends GameShell {
 						npc.animation = i_515_;
 						npc.anInt1547 = 0;
 						npc.anInt1548 = 0;
-						npc.aniomationDelay = i_516_;
+						npc.animationDelay = i_516_;
 						npc.anInt1550 = 0;
 						npc.anInt1562 = npc.pathLength;
 					}
@@ -7610,7 +7610,7 @@ public class Game extends GameShell {
 			try {
 				if (actor.anInt1568 == Game.currentCycle
 						|| actor.animation == -1
-						|| actor.aniomationDelay != 0
+						|| actor.animationDelay != 0
 						|| actor.anInt1548 + 1 > AnimationSequence.cache[actor.animation]
 								.getFrameLength(actor.anInt1547)) {
 					int i = actor.anInt1568 - actor.anInt1567;
@@ -7654,7 +7654,7 @@ public class Game extends GameShell {
 				if (actor.pathLength == 0) {
 					actor.anInt1523 = 0;
 				} else {
-					if (actor.animation != -1 && actor.aniomationDelay == 0) {
+					if (actor.animation != -1 && actor.animationDelay == 0) {
 						AnimationSequence animationsequence = AnimationSequence.cache[actor.animation];
 						if (actor.anInt1562 > 0 && animationsequence.anInt61 == 0) {
 							actor.anInt1523++;
@@ -7870,15 +7870,15 @@ public class Game extends GameShell {
 						actor.spotAnimationId = -1;
 					}
 				}
-				if (actor.animation != -1 && actor.aniomationDelay <= 1) {
+				if (actor.animation != -1 && actor.animationDelay <= 1) {
 					AnimationSequence animationsequence = AnimationSequence.cache[actor.animation];
 					if (animationsequence.anInt61 == 1 && actor.anInt1562 > 0 && actor.anInt1567 <= Game.currentCycle
 							&& actor.anInt1568 < Game.currentCycle) {
-						actor.aniomationDelay = 1;
+						actor.animationDelay = 1;
 						break;
 					}
 				}
-				if (actor.animation != -1 && actor.aniomationDelay == 0) {
+				if (actor.animation != -1 && actor.animationDelay == 0) {
 					AnimationSequence animationsequence = AnimationSequence.cache[actor.animation];
 					for (actor.anInt1548++; actor.anInt1547 < animationsequence.frameCount
 							&& actor.anInt1548 > animationsequence.getFrameLength(actor.anInt1547); actor.anInt1547++) {
@@ -7896,10 +7896,10 @@ public class Game extends GameShell {
 					}
 					actor.aBoolean1561 = animationsequence.aBoolean56;
 				}
-				if (actor.aniomationDelay <= 0) {
+				if (actor.animationDelay <= 0) {
 					break;
 				}
-				actor.aniomationDelay--;
+				actor.animationDelay--;
 			} catch (RuntimeException runtimeexception) {
 				SignLink.reportError("56331, " + actor + ", " + runtimeexception.toString());
 				throw new RuntimeException();
@@ -8627,7 +8627,7 @@ public class Game extends GameShell {
 						if (i_686_ == 1) {
 							player.anInt1547 = 0;
 							player.anInt1548 = 0;
-							player.aniomationDelay = animationDelay;
+							player.animationDelay = animationDelay;
 							player.anInt1550 = 0;
 						}
 						if (i_686_ == 2) {
@@ -8639,7 +8639,7 @@ public class Game extends GameShell {
 						player.animation = animationId;
 						player.anInt1547 = 0;
 						player.anInt1548 = 0;
-						player.aniomationDelay = animationDelay;
+						player.animationDelay = animationDelay;
 						player.anInt1550 = 0;
 						player.anInt1562 = player.pathLength;
 					}

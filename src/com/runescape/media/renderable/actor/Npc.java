@@ -11,7 +11,7 @@ public class Npc extends Actor {
 	public ActorDefinition npcDefinition;
 
 	private final Model getChildModel() {
-		if (animation >= 0 && aniomationDelay == 0) {
+		if (animation >= 0 && animationDelay == 0) {
 			int frameId = AnimationSequence.cache[animation].frame2Ids[anInt1547];
 			int frameId2 = -1;
 			if (anInt1537 >= 0 && anInt1537 != standAnimationId) {

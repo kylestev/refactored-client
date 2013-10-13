@@ -32,7 +32,7 @@ public class Actor extends Renderable {
 	public int animation = -1;
 	public int anInt1547;
 	public int anInt1548;
-	public int aniomationDelay;
+	public int animationDelay;
 	public int anInt1550;
 	public int chatEffect;
 	public int endCycle = -1000;
