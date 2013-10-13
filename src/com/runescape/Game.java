@@ -118,7 +118,7 @@ public class Game extends GameShell {
 	private ImageRGB anImageRGB896;
 	private boolean aBoolean897 = false;
 	private final int[] anIntArray898 = new int[5];
-	private int anInt899 = -1;
+	private int trackId = -1;
 	private final int anInt900 = -680;
 	private final boolean[] aBooleanArray901 = new boolean[5];
 	private int playerWeight;
@@ -395,7 +395,7 @@ public class Game extends GameShell {
 	private int anInt1194;
 	private int anInt1195;
 	private int anInt1196 = 1;
-	private long aLong1197;
+	private long trackStarted;
 	private String username = "";
 	private String password = "";
 	private static int anInt1200;
@@ -473,7 +473,7 @@ public class Game extends GameShell {
 	private int anInt1279;
 	private boolean redraw = false;
 	private boolean messagePromptRaised = false;
-	private int anInt1282;
+	private int trackPosition;
 	private byte[][][] currentSceneTileFlags;
 	private int songFadeCycle;
 	private int destinationX;
@@ -502,7 +502,7 @@ public class Game extends GameShell {
 	protected String aString1311;
 	private int publicChatSetting;
 	private static int currentWalkingQueueSize;
-	private int anInt1314 = -1;
+	private int trackLoops = -1;
 
 	private static final String formatAmount(int amount) {
 		String formatedAmount = String.valueOf(amount);
@@ -3336,7 +3336,7 @@ public class Game extends GameShell {
 					}
 					method53();
 					method115();
-					method90();
+					handleTrackLooping();
 					anInt1034++;
 					if (anInt1034 > 750) {
 						method68(-670);
@@ -6861,40 +6861,45 @@ public class Game extends GameShell {
 		spawnOjectNode.face = face;
 	}
 
-	public final void method90() {
+	public final void handleTrackLooping() {
 		try {
 			for (int track = 0; track < trackCount; track++) {
 				if (trackDelay[track] <= 0) {
-					boolean flag = false;
+					boolean replayTrack = false;
+
 					try {
-						if (trackIds[track] == anInt899 && trackLoop[track] == anInt1314) {
+						if (trackIds[track] == trackId && trackLoop[track] == trackLoops) {
 							if (!SignLink.waveReplay()) {
-								flag = true;
+								replayTrack = true;
 							}
 						} else {
 							Buffer buffer = SoundTrack.data(trackIds[track], trackLoop[track]);
-							if (System.currentTimeMillis() + buffer.offset / 22 > aLong1197 + anInt1282 / 22) {
-								anInt1282 = buffer.offset;
-								aLong1197 = System.currentTimeMillis();
+							if (System.currentTimeMillis() + buffer.offset / 22 > trackStarted + trackPosition / 22) {
+								trackPosition = buffer.offset;
+								trackStarted = System.currentTimeMillis();
+
 								if (SignLink.waveSave(buffer.payload, buffer.offset)) {
-									anInt899 = trackIds[track];
-									anInt1314 = trackLoop[track];
+									trackId = trackIds[track];
+									trackLoops = trackLoop[track];
 								} else {
-									flag = true;
+									replayTrack = true;
 								}
 							}
 						}
 					} catch (Exception exception) {
 						/* empty */
 					}
-					if (!flag || trackDelay[track] == -5) {
+
+					if (!replayTrack || trackDelay[track] == -5) {
 						trackCount--;
-						for (int i_539_ = track; i_539_ < trackCount; i_539_++) {
-							trackIds[i_539_] = trackIds[i_539_ + 1];
-							trackLoop[i_539_] = trackLoop[i_539_ + 1];
-							trackDelay[i_539_] = trackDelay[i_539_ + 1];
+
+						for (int trackIndex = track; trackIndex < trackCount; trackIndex++) {
+							trackIds[trackIndex] = trackIds[trackIndex + 1];
+							trackLoop[trackIndex] = trackLoop[trackIndex + 1];
+							trackDelay[trackIndex] = trackDelay[trackIndex + 1];
 						}
-						track--;
+
+						--track;
 					} else {
 						trackDelay[track] = -5;
 					}
@@ -6902,18 +6907,23 @@ public class Game extends GameShell {
 					trackDelay[track]--;
 				}
 			}
+
 			if (songFadeCycle <= 0) {
 				return;
 			}
+
 			songFadeCycle -= 20;
+
 			if (songFadeCycle < 0) {
 				songFadeCycle = 0;
 			}
+
 			if (songFadeCycle != 0 || !musicEnabled || Game.lowMemory) {
 				return;
 			}
-			onDemandRequesterId = songId;
-			midiFade = true;
+
+            midiFade = true;
+            onDemandRequesterId = songId;
 			onDemandRequester.request(2, onDemandRequesterId);
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("65150, " + runtimeexception.toString());
