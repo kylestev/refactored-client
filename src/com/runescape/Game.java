@@ -7412,73 +7412,85 @@ public class Game extends GameShell {
 		}
 	}
 
-	public final void method94(int i) {
-		do {
-			try {
-				if (i != -13873) {
-					for (int i_595_ = 1; i_595_ > 0; i_595_++) {
-						/* empty */
-					}
-				}
-				Graphics graphics = getComponent().getGraphics();
-				graphics.setColor(Color.black);
-				graphics.fillRect(0, 0, 765, 503);
-				this.setFrameRate(1);
-				if (aBoolean951) {
-					aBoolean856 = false;
-					graphics.setFont(new Font("Helvetica", 1, 16));
-					graphics.setColor(Color.yellow);
-					int i_596_ = 35;
-					graphics.drawString("Sorry, an error has occured whilst loading RuneScape", 30, i_596_);
-					i_596_ += 50;
-					graphics.setColor(Color.white);
-					graphics.drawString("To fix this try the following (in order):", 30, i_596_);
-					i_596_ += 50;
-					graphics.setColor(Color.white);
-					graphics.setFont(new Font("Helvetica", 1, 12));
-					graphics.drawString("1: Try closing ALL open web-browser windows, and reloading", 30, i_596_);
-					i_596_ += 30;
-					graphics.drawString("2: Try clearing your web-browsers cache from tools->internet options", 30,
-							i_596_);
-					i_596_ += 30;
-					graphics.drawString("3: Try using a different game-world", 30, i_596_);
-					i_596_ += 30;
-					graphics.drawString("4: Try rebooting your computer", 30, i_596_);
-					i_596_ += 30;
-					graphics.drawString("5: Try selecting a different version of Java from the play-game menu", 30,
-							i_596_);
-				}
-				if (aBoolean1201) {
-					aBoolean856 = false;
-					graphics.setFont(new Font("Helvetica", 1, 20));
-					graphics.setColor(Color.white);
-					graphics.drawString("Error - unable to load game!", 50, 50);
-					graphics.drawString("To play RuneScape make sure you play from", 50, 100);
-					graphics.drawString("http://www.runescape.com", 50, 150);
-				}
-				if (!aBoolean1277) {
-					break;
-				}
-				aBoolean856 = false;
-				graphics.setColor(Color.yellow);
-				int i_597_ = 35;
-				graphics.drawString("Error a copy of RuneScape already appears to be loaded", 30, i_597_);
-				i_597_ += 50;
-				graphics.setColor(Color.white);
-				graphics.drawString("To fix this try the following (in order):", 30, i_597_);
-				i_597_ += 50;
-				graphics.setColor(Color.white);
-				graphics.setFont(new Font("Helvetica", 1, 12));
-				graphics.drawString("1: Try closing ALL open web-browser windows, and reloading", 30, i_597_);
-				i_597_ += 30;
-				graphics.drawString("2: Try rebooting your computer, and reloading", 30, i_597_);
-				i_597_ += 30;
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("4031, " + i + ", " + runtimeexception.toString());
-				throw new RuntimeException();
-			}
-			break;
-		} while (false);
+	public final void displayLoadingError(int errorCode) {
+        try {
+            if (errorCode != -13873) {
+//                for (int i_595_ = 1; i_595_ > 0; i_595_++) {
+//                    /* empty */
+//                }
+            }
+
+            final int X = 30;
+            final Graphics graphics = getComponent().getGraphics();
+            graphics.setColor(Color.black);
+            graphics.fillRect(0, 0, 765, 503);
+            this.setFrameRate(1);
+
+            if (aBoolean951) {
+                int y = 35;
+                aBoolean856 = false;
+                graphics.setFont(new Font("Helvetica", 1, 16));
+                graphics.setColor(Color.yellow);
+
+                graphics.drawString("Sorry, an error has occured whilst loading RuneScape", X, y);
+                y += 50;
+
+                graphics.setColor(Color.white);
+                graphics.drawString("To fix this try the following (in order):", X, y);
+                y += 50;
+
+                graphics.setColor(Color.white);
+                graphics.setFont(new Font("Helvetica", 1, 12));
+                graphics.drawString("1: Try closing ALL open web-browser windows, and reloading", X, y);
+                y += 30;
+
+                graphics.drawString("2: Try clearing your web-browsers cache from tools->internet options", X, y);
+                y += 30;
+
+                graphics.drawString("3: Try using a different game-world", X, y);
+                y += 30;
+
+                graphics.drawString("4: Try rebooting your computer", X, y);
+                y += 30;
+
+                graphics.drawString("5: Try selecting a different version of Java from the play-game menu", X, y);
+            }
+
+            if (aBoolean1201) {
+                aBoolean856 = false;
+                graphics.setFont(new Font("Helvetica", 1, 20));
+                graphics.setColor(Color.white);
+                graphics.drawString("Error - unable to load game!", 50, 50);
+                graphics.drawString("To play RuneScape make sure you play from", 50, 100);
+                graphics.drawString("http://www.runescape.com", 50, 150);
+            }
+
+            if (!aBoolean1277) {
+                return;
+            }
+
+            int y = 35;
+            aBoolean856 = false;
+
+            graphics.setColor(Color.yellow);
+            graphics.drawString("Error a copy of RuneScape already appears to be loaded", X, y);
+            y += 50;
+
+            graphics.setColor(Color.white);
+            graphics.drawString("To fix this try the following (in order):", X, y);
+            y += 50;
+
+            graphics.setColor(Color.white);
+            graphics.setFont(new Font("Helvetica", 1, 12));
+            graphics.drawString("1: Try closing ALL open web-browser windows, and reloading", X, y);
+            y += 30;
+
+            graphics.drawString("2: Try rebooting your computer, and reloading", X, y);
+            y += 30;
+        } catch (RuntimeException runtimeexception) {
+            SignLink.reportError("4031, " + errorCode + ", " + runtimeexception.toString());
+            throw new RuntimeException();
+        }
 	}
 
 	@Override
@@ -8837,7 +8849,7 @@ public class Game extends GameShell {
 	@Override
 	public final void repaintGame() {
 		if (aBoolean1277 || aBoolean951 || aBoolean1201) {
-			method94(-13873);
+			displayLoadingError(-13873);
 		} else {
 			Game.anInt1086++;
 			if (!loggedIn) {
