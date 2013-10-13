@@ -39,7 +39,7 @@ public class Actor extends Renderable {
 	public int maxHealth;
 	public int currentHealth;
 	public int anInt1555 = 100;
-	public int anInt1557;
+	public int cycleLastUpdated;
 	public int faceTowardX;
 	public int faceTowardY;
 	public int boundaryDimension = 1;

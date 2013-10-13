@@ -1509,7 +1509,7 @@ public class Game extends GameShell {
 		method86(actorIndex, buffer, true);
 		for (int i_137_ = 0; i_137_ < anInt864; i_137_++) {
 			int i_138_ = anIntArray865[i_137_];
-			if (localNpcs[i_138_].anInt1557 != Game.currentCycle) {
+			if (localNpcs[i_138_].cycleLastUpdated != Game.currentCycle) {
 				localNpcs[i_138_].npcDefinition = null;
 				localNpcs[i_138_] = null;
 			}
@@ -2363,7 +2363,7 @@ public class Game extends GameShell {
 				}
 				Npc npc = localNpcs[idx];
 				anIntArray862[actorCount++] = idx;
-				npc.anInt1557 = Game.currentCycle;
+				npc.cycleLastUpdated = Game.currentCycle;
 				int offsetY = buffer.getBits(5);
 				if (offsetY > 15) {
 					offsetY -= 32;
@@ -7297,7 +7297,7 @@ public class Game extends GameShell {
 				}
 				anIntArray917[playerCount++] = playerId;
 				Player player = players[playerId];
-				player.anInt1557 = Game.currentCycle;
+				player.cycleLastUpdated = Game.currentCycle;
 				int i_580_ = buffer.getBits(1);
 				if (i_580_ == 1) {
 					anIntArray919[anInt918++] = playerId;
@@ -10006,16 +10006,16 @@ public class Game extends GameShell {
 				int i_848_ = buffer.getBits(1);
 				if (i_848_ == 0) {
 					anIntArray917[playerCount++] = i_847_;
-					player.anInt1557 = Game.currentCycle;
+					player.cycleLastUpdated = Game.currentCycle;
 				} else {
 					int i_849_ = buffer.getBits(2);
 					if (i_849_ == 0) {
 						anIntArray917[playerCount++] = i_847_;
-						player.anInt1557 = Game.currentCycle;
+						player.cycleLastUpdated = Game.currentCycle;
 						anIntArray919[anInt918++] = i_847_;
 					} else if (i_849_ == 1) {
 						anIntArray917[playerCount++] = i_847_;
-						player.anInt1557 = Game.currentCycle;
+						player.cycleLastUpdated = Game.currentCycle;
 						int i_850_ = buffer.getBits(3);
 						player.move(i_850_, false);
 						int i_851_ = buffer.getBits(1);
@@ -10024,7 +10024,7 @@ public class Game extends GameShell {
 						}
 					} else if (i_849_ == 2) {
 						anIntArray917[playerCount++] = i_847_;
-						player.anInt1557 = Game.currentCycle;
+						player.cycleLastUpdated = Game.currentCycle;
 						int i_852_ = buffer.getBits(3);
 						player.move(i_852_, true);
 						int i_853_ = buffer.getBits(3);
@@ -10494,16 +10494,16 @@ public class Game extends GameShell {
 				int i_973_ = buffer.getBits(1);
 				if (i_973_ == 0) {
 					anIntArray862[actorCount++] = i_972_;
-					npc.anInt1557 = Game.currentCycle;
+					npc.cycleLastUpdated = Game.currentCycle;
 				} else {
 					int i_974_ = buffer.getBits(2);
 					if (i_974_ == 0) {
 						anIntArray862[actorCount++] = i_972_;
-						npc.anInt1557 = Game.currentCycle;
+						npc.cycleLastUpdated = Game.currentCycle;
 						anIntArray919[anInt918++] = i_972_;
 					} else if (i_974_ == 1) {
 						anIntArray862[actorCount++] = i_972_;
-						npc.anInt1557 = Game.currentCycle;
+						npc.cycleLastUpdated = Game.currentCycle;
 						int i_975_ = buffer.getBits(3);
 						npc.move(i_975_, false);
 						int i_976_ = buffer.getBits(1);
@@ -10512,7 +10512,7 @@ public class Game extends GameShell {
 						}
 					} else if (i_974_ == 2) {
 						anIntArray862[actorCount++] = i_972_;
-						npc.anInt1557 = Game.currentCycle;
+						npc.cycleLastUpdated = Game.currentCycle;
 						int i_977_ = buffer.getBits(3);
 						npc.move(i_977_, true);
 						int i_978_ = buffer.getBits(3);
@@ -10748,7 +10748,7 @@ public class Game extends GameShell {
 			method49(buffer);
 			for (int i_ = 0; i_ < anInt864; i_++) {
 				int playerId = anIntArray865[i_];
-				if (players[playerId].anInt1557 != Game.currentCycle) {
+				if (players[playerId].cycleLastUpdated != Game.currentCycle) {
 					players[playerId] = null;
 				}
 			}
