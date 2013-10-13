@@ -7303,15 +7303,15 @@ public class Game extends GameShell {
 					anIntArray919[anInt918++] = playerId;
 				}
 				buffer.getBits(1);
-				int i_582_ = buffer.getBits(5);
-				if (i_582_ > 15) {
-					i_582_ -= 32;
+				int offsetY = buffer.getBits(5);
+				if (offsetY > 15) {
+					offsetY -= 32;
 				}
-				int i_583_ = buffer.getBits(5);
-				if (i_583_ > 15) {
-					i_583_ -= 32;
+				int offsetX = buffer.getBits(5);
+				if (offsetX > 15) {
+					offsetX -= 32;
 				}
-				player.setPosition(Game.localPlayer.pathX[0] + i_583_, Game.localPlayer.pathY[0] + i_582_);
+				player.setPosition(Game.localPlayer.pathX[0] + offsetX, Game.localPlayer.pathY[0] + offsetY);
 			}
 			buffer.finishBitAccess();
 		} catch (RuntimeException runtimeexception) {
