@@ -1,21 +1,5 @@
 package com.runescape;
 
-import java.applet.AppletContext;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.math.BigInteger;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.URL;
-import java.util.zip.CRC32;
-
 import com.runescape.cache.Archive;
 import com.runescape.cache.Index;
 import com.runescape.cache.cfg.ChatCensor;
@@ -25,14 +9,7 @@ import com.runescape.cache.def.ActorDefinition;
 import com.runescape.cache.def.FloorDefinition;
 import com.runescape.cache.def.GameObjectDefinition;
 import com.runescape.cache.def.ItemDefinition;
-import com.runescape.cache.media.AnimationSequence;
-import com.runescape.cache.media.IdentityKit;
-import com.runescape.cache.media.ImageRGB;
-import com.runescape.cache.media.IndexedImage;
-import com.runescape.cache.media.Model;
-import com.runescape.cache.media.SpotAnimation;
-import com.runescape.cache.media.TypeFace;
-import com.runescape.cache.media.Widget;
+import com.runescape.cache.media.*;
 import com.runescape.collection.LinkedList;
 import com.runescape.media.Animation;
 import com.runescape.media.ProducingGraphicsBuffer;
@@ -59,12 +36,20 @@ import com.runescape.scene.tile.Wall;
 import com.runescape.scene.tile.WallDecoration;
 import com.runescape.scene.util.CollisionMap;
 import com.runescape.sound.SoundTrack;
-import com.runescape.util.ChatEncoder;
-import com.runescape.util.MouseCapturer;
-import com.runescape.util.PacketConstants;
-import com.runescape.util.SignLink;
-import com.runescape.util.SkillConstants;
-import com.runescape.util.TextUtils;
+import com.runescape.util.*;
+
+import java.applet.AppletContext;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.URL;
+import java.util.zip.CRC32;
 
 @SuppressWarnings("serial")
 public class Game extends GameShell {
@@ -6658,7 +6643,7 @@ public class Game extends GameShell {
 						Game.aBoolean944 = !Game.aBoolean944;
 					}
 					if (npcdefinition.combatLevel != 0) {
-						string += Game.method110(Game.localPlayer.combatLevel, npcdefinition.combatLevel, true)
+						string += Game.getInteractingColor(Game.localPlayer.combatLevel, npcdefinition.combatLevel, true)
 								+ " (level-" + npcdefinition.combatLevel + ")";
 					}
 					if (anInt1307 == 1) {
@@ -6757,7 +6742,7 @@ public class Game extends GameShell {
 			if (player != Game.localPlayer && menuActionRow < 400 && !bool) {
 				String string;
 				if (player.anInt1743 == 0) {
-					string = player.playerName + Game.method110(Game.localPlayer.combatLevel, player.combatLevel, true)
+					string = player.playerName + Game.getInteractingColor(Game.localPlayer.combatLevel, player.combatLevel, true)
 							+ " (level-" + player.combatLevel + ")";
 				} else {
 					string = player.playerName + " (skill-" + player.anInt1743 + ")";
@@ -8866,39 +8851,32 @@ public class Game extends GameShell {
 		}
 	}
 
-	public static final String method110(int i, int i_710_, boolean bool) {
+	public static final String getInteractingColor(int combatLevel, int interactingCombatLevel, boolean bool) {
 		try {
 			if (!bool) {
 				throw new NullPointerException();
 			}
-			int i_711_ = i - i_710_;
-			if (i_711_ < -9) {
+			int difference = combatLevel - interactingCombatLevel;
+			if (difference < -9) {
 				return "@red@";
-			}
-			if (i_711_ < -6) {
+			} else if (difference < -6) {
 				return "@or3@";
-			}
-			if (i_711_ < -3) {
+			} else if (difference < -3) {
 				return "@or2@";
-			}
-			if (i_711_ < 0) {
+			} else if (difference < 0) {
 				return "@or1@";
-			}
-			if (i_711_ > 9) {
+			} else if (difference > 9) {
 				return "@gre@";
-			}
-			if (i_711_ > 6) {
+			} else if (difference > 6) {
 				return "@gr3@";
-			}
-			if (i_711_ > 3) {
+			} else if (difference > 3) {
 				return "@gr2@";
-			}
-			if (i_711_ > 0) {
+			} else if (difference > 0) {
 				return "@gr1@";
 			}
 			return "@yel@";
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("19760, " + i + ", " + i_710_ + ", " + bool + ", " + runtimeexception.toString());
+			SignLink.reportError("19760, " + combatLevel + ", " + interactingCombatLevel + ", " + bool + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
