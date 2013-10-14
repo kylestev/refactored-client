@@ -433,7 +433,7 @@ public class Game extends GameShell {
     private int anInt1236 = 78;
     private String chatMessage = "";
     private int anInt1238;
-    private int[][][] anIntArrayArrayArray1239;
+    private int[][][] currentSceneVertexHeights;
     private long aLong1240;
     private int anInt1241;
     private final IndexedImage[] moderatorIcon = new IndexedImage[2];
@@ -916,7 +916,7 @@ public class Game extends GameShell {
                         }
                     }
                 }
-                Region region = new Region(currentSceneTileFlags, 104, 104, anIntArrayArrayArray1239);
+                Region region = new Region(currentSceneTileFlags, 104, 104, currentSceneVertexHeights);
                 int i = aByteArrayArray1208.length;
                 outBuffer.putOpcode(0);
                 if (!aBoolean1184) {
@@ -2268,10 +2268,10 @@ public class Game extends GameShell {
             }
             int i_203_ = i_199_ & 0x7f;
             int i_204_ = i_198_ & 0x7f;
-            int i_205_ = anIntArrayArrayArray1239[i_202_][i_200_][i_201_] * (128 - i_203_)
-                    + anIntArrayArrayArray1239[i_202_][i_200_ + 1][i_201_] * i_203_ >> 7;
-            int i_206_ = anIntArrayArrayArray1239[i_202_][i_200_][i_201_ + 1] * (128 - i_203_)
-                    + anIntArrayArrayArray1239[i_202_][i_200_ + 1][i_201_ + 1] * i_203_ >> 7;
+            int i_205_ = currentSceneVertexHeights[i_202_][i_200_][i_201_] * (128 - i_203_)
+                    + currentSceneVertexHeights[i_202_][i_200_ + 1][i_201_] * i_203_ >> 7;
+            int i_206_ = currentSceneVertexHeights[i_202_][i_200_][i_201_ + 1] * (128 - i_203_)
+                    + currentSceneVertexHeights[i_202_][i_200_ + 1][i_201_ + 1] * i_203_ >> 7;
             return i_205_ * (128 - i_204_) + i_206_ * i_204_ >> 7;
         } catch (RuntimeException runtimeexception) {
             SignLink.reportError("48438, " + i + ", " + i_198_ + ", " + bool + ", " + i_199_ + ", "
@@ -5013,7 +5013,7 @@ public class Game extends GameShell {
         aByteArrayArray1272 = null;
         anIntArray1260 = null;
         anIntArray1261 = null;
-        anIntArrayArrayArray1239 = null;
+        currentSceneVertexHeights = null;
         currentSceneTileFlags = null;
         currentScene = null;
         currentCollisionMap = null;
@@ -6947,8 +6947,8 @@ public class Game extends GameShell {
             Archive archiveCensor = requestArchive(7, "chat system", "wordenc", crcValues[7], 50);
             Archive archiveAudio = requestArchive(8, "sound effects", "sounds", crcValues[8], 55);
             currentSceneTileFlags = new byte[4][104][104];
-            anIntArrayArrayArray1239 = new int[4][105][105];
-            currentScene = new Scene(104, (byte) 43, 104, anIntArrayArrayArray1239, 4);
+            currentSceneVertexHeights = new int[4][105][105];
+            currentScene = new Scene(104, (byte) 43, 104, currentSceneVertexHeights, 4);
             for (int i = 0; i < 4; i++) {
                 currentCollisionMap[i] = new CollisionMap(104, 104, true);
             }
@@ -8792,7 +8792,7 @@ public class Game extends GameShell {
                                 if (i_706_ < 3 && (currentSceneTileFlags[1][i_704_][i_705_] & 0x2) == 2) {
                                     i_706_++;
                                 }
-                                int i_707_ = i_702_ - anIntArrayArrayArray1239[i_706_][i_704_][i_705_];
+                                int i_707_ = i_702_ - currentSceneVertexHeights[i_706_][i_704_][i_705_];
                                 if (i_707_ > i_703_) {
                                     i_703_ = i_707_;
                                 }
@@ -10263,10 +10263,10 @@ public class Game extends GameShell {
                     int i_899_ = anIntArray1202[i_897_];
                     int i_900_ = buffer.getUnsignedLEShortA();
                     if (i_894_ >= 0 && i_895_ >= 0 && i_894_ < 103 && i_895_ < 103) {
-                        int i_901_ = anIntArrayArrayArray1239[currentSceneId][i_894_][i_895_];
-                        int i_902_ = anIntArrayArrayArray1239[currentSceneId][i_894_ + 1][i_895_];
-                        int i_903_ = anIntArrayArrayArray1239[currentSceneId][i_894_ + 1][i_895_ + 1];
-                        int i_904_ = anIntArrayArrayArray1239[currentSceneId][i_894_][i_895_ + 1];
+                        int i_901_ = currentSceneVertexHeights[currentSceneId][i_894_][i_895_];
+                        int i_902_ = currentSceneVertexHeights[currentSceneId][i_894_ + 1][i_895_];
+                        int i_903_ = currentSceneVertexHeights[currentSceneId][i_894_ + 1][i_895_ + 1];
+                        int i_904_ = currentSceneVertexHeights[currentSceneId][i_894_][i_895_ + 1];
                         if (i_899_ == 0) {
                             Wall wall = currentScene.getWall(currentSceneId, i_894_, i_895_);
                             if (wall != null) {
@@ -10336,10 +10336,10 @@ public class Game extends GameShell {
                         }
                         if (player != null) {
                             GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_919_);
-                            int i_921_ = anIntArrayArrayArray1239[currentSceneId][i_907_][i_908_];
-                            int i_922_ = anIntArrayArrayArray1239[currentSceneId][i_907_ + 1][i_908_];
-                            int i_923_ = anIntArrayArrayArray1239[currentSceneId][i_907_ + 1][i_908_ + 1];
-                            int i_924_ = anIntArrayArrayArray1239[currentSceneId][i_907_][i_908_ + 1];
+                            int i_921_ = currentSceneVertexHeights[currentSceneId][i_907_][i_908_];
+                            int i_922_ = currentSceneVertexHeights[currentSceneId][i_907_ + 1][i_908_];
+                            int i_923_ = currentSceneVertexHeights[currentSceneId][i_907_ + 1][i_908_ + 1];
+                            int i_924_ = currentSceneVertexHeights[currentSceneId][i_907_][i_908_ + 1];
                             Model model = gameobjectdefinition.getModelAt(i_915_, i_916_, i_921_, i_922_, i_923_,
                                     i_924_, -1);
                             if (model != null) {
@@ -10736,7 +10736,7 @@ public class Game extends GameShell {
                     i_1007_++;
                 }
                 Region.method470(currentScene, i_995_, y, i_996_, i_1007_, currentCollisionMap[plane],
-                        anIntArrayArrayArray1239, x, i_999_, plane, (byte) 93);
+                        currentSceneVertexHeights, x, i_999_, plane, (byte) 93);
             }
             break;
         } while (false);
