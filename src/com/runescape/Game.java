@@ -124,7 +124,7 @@ public class Game extends GameShell {
     protected MouseCapturer mouseCapturer;
     private volatile boolean aBoolean905 = false;
     private String reportedName = "";
-    private int anInt909 = -1;
+    private int currentPlayerIndex = -1;
     private boolean actionMenuOpen = false;
     private int anInt911;
     private String chatboxInput = "";
@@ -276,7 +276,7 @@ public class Game extends GameShell {
     private int anInt1067 = -1;
     private final int[] skillMaxLevel = new int[SkillConstants.SKILL_COUNT];
     private final int[] defaultSettings = new int[2000];
-    private int anInt1071;
+    private int isMember;
     private boolean characterEditChangeGender = true;
     private int anInt1073;
     private String loadStatusMessage;
@@ -2216,7 +2216,7 @@ public class Game extends GameShell {
     public final void method41(byte b, long l) {
         try {
             if (l != 0L) {
-                if (friendsListCount >= 100 && anInt1071 != 1) {
+                if (friendsListCount >= 100 && isMember != 1) {
                     sendMessage("Your friendlist is full. Max of 100 for free users, and 200 for members", 0, "");
                 } else if (friendsListCount >= 200) {
                     sendMessage("Your friendlist is full. Max of 100 for free users, and 200 for members", 0, "");
@@ -2925,49 +2925,38 @@ public class Game extends GameShell {
         }
     }
 
-    public final void method55(int i) {
-        try {
-            while (i >= 0) {
-                startup();
-            }
-            for (Projectile projectile = (Projectile) projectileList.getBack(); projectile != null; projectile = (Projectile) projectileList
-                    .getPrevious()) {
-                if (projectile.sceneId != currentSceneId || Game.currentCycle > projectile.endCycle) {
-                    projectile.remove();
-                } else if (Game.currentCycle >= projectile.delay) {
-                    if (projectile.targetedEntityId > 0) {
-                        Npc npc = localNpcs[projectile.targetedEntityId - 1];
-                        if (npc != null && npc.xWithBoundary >= 0 && npc.xWithBoundary < 13312
-                                && npc.yWithBoundary >= 0 && npc.yWithBoundary < 13312) {
-                            projectile.trackTarget(Game.currentCycle, npc.yWithBoundary,
-                                    method42(projectile.sceneId, npc.yWithBoundary, true, npc.xWithBoundary)
-                                            - projectile.endHeight, npc.xWithBoundary);
-                        }
+    public final void updateProjectiles() {
+        for (Projectile projectile = (Projectile) projectileList.getBack(); projectile != null;
+                projectile = (Projectile) projectileList.getPrevious()) {
+            if (projectile.sceneId != currentSceneId || Game.currentCycle > projectile.endCycle) {
+                projectile.remove();
+            } else if (Game.currentCycle >= projectile.delay) {
+                if (projectile.targetedEntityId > 0) {
+                    final Npc npc = localNpcs[projectile.targetedEntityId - 1];
+                    if (npc != null && npc.xWithBoundary >= 0 && npc.xWithBoundary < 13312
+                            && npc.yWithBoundary >= 0 && npc.yWithBoundary < 13312) {
+                        final int targetZ = method42(projectile.sceneId, npc.yWithBoundary, true, npc.xWithBoundary) - projectile.endHeight;
+                        projectile.trackTarget(Game.currentCycle, npc.yWithBoundary, targetZ, npc.xWithBoundary);
                     }
-                    if (projectile.targetedEntityId < 0) {
-                        int i_279_ = -projectile.targetedEntityId - 1;
-                        Player player;
-                        if (i_279_ == anInt909) {
-                            player = Game.localPlayer;
-                        } else {
-                            player = players[i_279_];
-                        }
-                        if (player != null && player.xWithBoundary >= 0 && player.xWithBoundary < 13312
-                                && player.yWithBoundary >= 0 && player.yWithBoundary < 13312) {
-                            projectile.trackTarget(Game.currentCycle, player.yWithBoundary,
-                                    method42(projectile.sceneId, player.yWithBoundary, true, player.xWithBoundary)
-                                            - projectile.endHeight, player.xWithBoundary);
-                        }
-                    }
-                    projectile.move(anInt970);
-                    currentScene.method507(currentSceneId, projectile.modelRotationY, (byte) 6,
-                            (int) projectile.currentHeight, -1, (int) projectile.currentY, 60,
-                            (int) projectile.currentX, projectile, false);
                 }
+
+                if (projectile.targetedEntityId < 0) {
+                    final int playerTarget = -projectile.targetedEntityId - 1;
+                    final Player player = (playerTarget == currentPlayerIndex) ?
+                            Game.localPlayer : players[playerTarget];
+
+                    if (player != null && player.xWithBoundary >= 0 && player.xWithBoundary < 13312
+                            && player.yWithBoundary >= 0 && player.yWithBoundary < 13312) {
+                        final int targetZ = method42(projectile.sceneId, player.yWithBoundary, true, player.xWithBoundary) - projectile.endHeight;
+                        projectile.trackTarget(Game.currentCycle, player.yWithBoundary, targetZ, player.xWithBoundary);
+                    }
+                }
+
+                projectile.move(anInt970);
+                currentScene.method507(currentSceneId, projectile.modelRotationY, (byte) 6,
+                        (int) projectile.currentHeight, -1, (int) projectile.currentY, 60,
+                        (int) projectile.currentX, projectile, false);
             }
-        } catch (RuntimeException runtimeexception) {
-            SignLink.reportError("65179, " + i + ", " + runtimeexception.toString());
-            throw new RuntimeException();
         }
     }
 
@@ -7789,7 +7778,7 @@ public class Game extends GameShell {
                     }
                     if (actor.interactingEntity >= 32768) {
                         int i_616_ = actor.interactingEntity - 32768;
-                        if (i_616_ == anInt909) {
+                        if (i_616_ == currentPlayerIndex) {
                             i_616_ = localPlayerId;
                         }
                         Player player = players[i_616_];
@@ -10233,7 +10222,7 @@ public class Game extends GameShell {
                     int i_886_ = playerPositionY + (i_884_ & 0x7);
                     int i_887_ = buffer.getUnsignedLEShortA();
                     int i_888_ = buffer.getUnsignedLEShort();
-                    if (i_885_ >= 0 && i_886_ >= 0 && i_885_ < 104 && i_886_ < 104 && i_887_ != anInt909) {
+                    if (i_885_ >= 0 && i_886_ >= 0 && i_885_ < 104 && i_886_ < 104 && i_887_ != currentPlayerIndex) {
                         Item item = new Item();
                         item.itemId = i_883_;
                         item.itemCount = i_888_;
@@ -10340,7 +10329,7 @@ public class Game extends GameShell {
                         int i_919_ = buffer.getUnsignedLEShort();
                         int i_920_ = buffer.getByteC();
                         Player player;
-                        if (i_909_ == anInt909) {
+                        if (i_909_ == currentPlayerIndex) {
                             player = Game.localPlayer;
                         } else {
                             player = players[i_909_];
@@ -11857,8 +11846,8 @@ public class Game extends GameShell {
 
 				/* Initialize Player */
                 if (opcode == 249) {
-                    anInt1071 = inBuffer.getUnsignedByteA();
-                    anInt909 = inBuffer.getUnsignedShortA();
+                    isMember = inBuffer.getUnsignedByteA();
+                    currentPlayerIndex = inBuffer.getUnsignedShortA();
                     opcode = -1;
                     return true;
                 }
@@ -12074,7 +12063,7 @@ public class Game extends GameShell {
             method26(true);
             method47(false);
             method26(false);
-            method55(-948);
+            updateProjectiles();
             method104(true);
             if (!aBoolean1185) {
                 int i = anInt1209;
