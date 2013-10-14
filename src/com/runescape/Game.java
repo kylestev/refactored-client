@@ -5721,65 +5721,70 @@ public class Game extends GameShell {
         } while (false);
     }
 
-    public final void method76() {
-        try {
-            if (anInt1220 != 0) {
-                TypeFace font = fontNormal;
-                int row = 0;
-                if (systemUpdateTime != 0) {
-                    row = 1;
+    public final void drawPrivateChatOverGame() {
+        if (anInt1220 == 0) {
+            return;
+        }
+
+        int row = 0;
+        final TypeFace font = fontNormal;
+
+        if (systemUpdateTime != 0) {
+            row = 1;
+        }
+
+        for (int i = 0; i < 100; i++) {
+            if (chatboxMessages[i] != null) {
+                final int type = chatboxMessageTypes[i];
+                String name = chatboxMessageNames[i];
+                int rights = 0;
+
+                if (name != null && name.startsWith("@cr")) {
+                    rights = Integer.parseInt(name.substring(3, name.lastIndexOf("@")));
+                    name = name.substring(5);
                 }
-                for (int i = 0; i < 100; i++) {
-                    if (chatboxMessages[i] != null) {
-                        int type = chatboxMessageTypes[i];
-                        String name = chatboxMessageNames[i];
-                        int rights = 0;
-                        if (name != null) {
-                            if (name.startsWith("@cr")) {
-                                rights = Integer.parseInt(name.substring(3, name.lastIndexOf("@")));
-                                name = name.substring(5);
-                            }
-                        }
-                        if ((type == 3 || type == 7)
-                                && (type == 7 || privateChatSetting == 0 || privateChatSetting == 1
-                                && isUsernameFriendOrSelf(name))) {
-                            int y = 329 - row * 13;
-                            int x = 4;
-                            font.drawString("From", x, y, 0);
-                            font.drawString("From", x, y - 1, 0xFFFF);
-                            x += font.getStringEffectWidth("From ");
-                            if (rights > 0) {
-                                moderatorIcon[rights - 1].drawImage(x, y - 12);
-                                x += 14;
-                            }
-                            font.drawString(name + ": " + chatboxMessages[i], x, y, 0);
-                            font.drawString(name + ": " + chatboxMessages[i], x, y - 1, 0xFFFF);
-                            if (++row >= 5) {
-                                break;
-                            }
-                        }
-                        if (type == 5 && privateChatSetting < 2) {
-                            int y = 329 - row * 13;
-                            font.drawString(chatboxMessages[i], 4, y, 0);
-                            font.drawString(chatboxMessages[i], 4, y - 1, 0xFFFF);
-                            if (++row >= 5) {
-                                break;
-                            }
-                        }
-                        if (type == 6 && privateChatSetting < 2) {
-                            int y = 329 - row * 13;
-                            font.drawString("To " + name + ": " + chatboxMessages[i], 4, y, 0);
-                            font.drawString("To " + name + ": " + chatboxMessages[i], 4, y - 1, 0xFFFF);
-                            if (++row >= 5) {
-                                break;
-                            }
-                        }
+
+                if ((type == 3 || type == 7) && (type == 7 || privateChatSetting == 0 || privateChatSetting == 1
+                        && isUsernameFriendOrSelf(name))) {
+                    int x = 4;
+                    final int y = 329 - row * 13;
+                    font.drawString("From", x, y, 0);
+                    font.drawString("From", x, y - 1, 0xFFFF);
+                    x += font.getStringEffectWidth("From ");
+
+                    if (rights > 0) {
+                        moderatorIcon[rights - 1].drawImage(x, y - 12);
+                        x += 14;
+                    }
+
+                    font.drawString(name + ": " + chatboxMessages[i], x, y, 0);
+                    font.drawString(name + ": " + chatboxMessages[i], x, y - 1, 0xFFFF);
+
+                    if (++row >= 5) {
+                        break;
+                    }
+                }
+
+                if (type == 5 && privateChatSetting < 2) {
+                    final int y = 329 - row * 13;
+                    font.drawString(chatboxMessages[i], 4, y, 0);
+                    font.drawString(chatboxMessages[i], 4, y - 1, 0xFFFF);
+
+                    if (++row >= 5) {
+                        break;
+                    }
+                }
+
+                if (type == 6 && privateChatSetting < 2) {
+                    final int y = 329 - row * 13;
+                    font.drawString("To " + name + ": " + chatboxMessages[i], 4, y, 0);
+                    font.drawString("To " + name + ": " + chatboxMessages[i], 4, y - 1, 0xFFFF);
+
+                    if (++row >= 5) {
+                        break;
                     }
                 }
             }
-        } catch (RuntimeException runtimeexception) {
-            SignLink.reportError("85217, " + runtimeexception.toString());
-            throw new RuntimeException();
         }
     }
 
@@ -8920,7 +8925,7 @@ public class Game extends GameShell {
     }
 
     public final void method112() {
-        method76();
+        drawPrivateChatOverGame();
 
         if (lastClickType == 1) {
             cursorCross[anInt941 / 100].drawImage(lastClickX - 8 - 4, lastClickY - 8 - 4);
