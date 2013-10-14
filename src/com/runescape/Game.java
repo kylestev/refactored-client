@@ -1907,30 +1907,26 @@ public class Game extends GameShell {
         }
     }
 
-    public final void method35(boolean bool, long l) {
-        try {
-            if (l != 0L) {
-                for (int i = 0; i < friendsListCount; i++) {
-                    if (friendsListLongs[i] == l) {
-                        friendsListCount--;
-                        redrawTab = true;
-                        for (int i_162_ = i; i_162_ < friendsListCount; i_162_++) {
-                            friendsListNames[i_162_] = friendsListNames[i_162_ + 1];
-                            friendsListWorlds[i_162_] = friendsListWorlds[i_162_ + 1];
-                            friendsListLongs[i_162_] = friendsListLongs[i_162_ + 1];
-                        }
-                        outBuffer.putOpcode(215);
-                        outBuffer.putLong(l);
-                        break;
-                    }
+    public final void removeFriend(final long usernameLong) {
+        if (usernameLong == 0L) {
+            return;
+        }
+
+        for (int i = 0; i < friendsListCount; i++) {
+            if (friendsListLongs[i] == usernameLong) {
+                friendsListCount--;
+                redrawTab = true;
+
+                for (int j = i; j < friendsListCount; j++) {
+                    friendsListNames[j] = friendsListNames[j + 1];
+                    friendsListWorlds[j] = friendsListWorlds[j + 1];
+                    friendsListLongs[j] = friendsListLongs[j + 1];
                 }
-                if (bool) {
-                    return;
-                }
+
+                outBuffer.putOpcode(215);
+                outBuffer.putLong(usernameLong);
+                break;
             }
-        } catch (RuntimeException runtimeexception) {
-            SignLink.reportError("18622, " + bool + ", " + l + ", " + runtimeexception.toString());
-            throw new RuntimeException();
         }
     }
 
@@ -4086,7 +4082,7 @@ public class Game extends GameShell {
                             addIgnore(l, 4);
                         }
                         if (menuActionId == 792) {
-                            method35(false, l);
+                            removeFriend(l);
                         }
                         if (menuActionId == 322) {
                             method122(3, l);
@@ -5177,7 +5173,7 @@ public class Game extends GameShell {
                         }
                         if (friendsListAction == 2 && friendsListCount > 0) {
                             long l = TextUtils.nameToLong(chatMessage);
-                            method35(false, l);
+                            removeFriend(l);
                         }
                         if (friendsListAction == 3 && chatMessage.length() > 0) {
                             outBuffer.putOpcode(126);
