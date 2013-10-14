@@ -358,10 +358,10 @@ public class Game extends GameShell {
     private int anInt1157 = 2;
     private int menuActionRow;
     private static int anInt1159;
-    private int anInt1161;
+    private int selectedSpell;
     private int spellId;
     private int anInt1163;
-    protected String aString1164;
+    protected String selectedSpellName;
     private ImageRGB[] minimapHint = new ImageRGB[1000];
     private boolean aBoolean1166 = false;
     private static int anInt1167;
@@ -785,7 +785,7 @@ public class Game extends GameShell {
     public final void method20() {
         if (anInt1111 == 0) {
             int type = clickType;
-            if (anInt1161 == 1 && clickX >= 516 && clickY >= 160 && clickX <= 765 && clickY <= 205) {
+            if (selectedSpell == 1 && clickX >= 516 && clickY >= 160 && clickX <= 765 && clickY <= 205) {
                 type = 0;
             }
             if (actionMenuOpen) {
@@ -1296,7 +1296,7 @@ public class Game extends GameShell {
                                 menuActionRow++;
                             }
                         }
-                        if (widgetChild.actionType == 2 && anInt1161 == 0 && i_112_ >= i_118_ && i_114_ >= i_119_
+                        if (widgetChild.actionType == 2 && selectedSpell == 0 && i_112_ >= i_118_ && i_114_ >= i_119_
                                 && i_112_ < i_118_ + widgetChild.width && i_114_ < i_119_ + widgetChild.height) {
                             String string = widgetChild.selectedActionName;
                             if (string.indexOf(" ") != -1) {
@@ -1363,9 +1363,9 @@ public class Game extends GameShell {
                                                     menuActionIds3[menuActionRow] = widgetChild.id;
                                                     menuActionRow++;
                                                 }
-                                            } else if (anInt1161 == 1 && widgetChild.isInventory) {
+                                            } else if (selectedSpell == 1 && widgetChild.isInventory) {
                                                 if ((anInt1163 & 0x10) == 16) {
-                                                    menuActionNames[menuActionRow] = aString1164 + " @lre@"
+                                                    menuActionNames[menuActionRow] = selectedSpellName + " @lre@"
                                                             + itemdefinition.name;
                                                     menuActionIds[menuActionRow] = 543;
                                                     menuActionIds1[menuActionRow] = itemdefinition.id;
@@ -4193,7 +4193,7 @@ public class Game extends GameShell {
                 }
                 if (menuActionId == 626) {
                     Widget widget = Widget.cache[actionId2];
-                    anInt1161 = 1;
+                    selectedSpell = 1;
                     spellId = actionId2;
                     anInt1163 = widget.spellUsableOn;
                     selectedItem = 0;
@@ -4206,7 +4206,7 @@ public class Game extends GameShell {
                     if (string_383_.indexOf(" ") != -1) {
                         string_383_ = string_383_.substring(string_383_.indexOf(" ") + 1);
                     }
-                    aString1164 = string + " " + widget.spellName + " " + string_383_;
+                    selectedSpellName = string + " " + widget.spellName + " " + string_383_;
                     if (anInt1163 == 16) {
                         redrawTab = true;
                         currentTabId = 3;
@@ -4686,7 +4686,7 @@ public class Game extends GameShell {
                         anInt1309 = actionId2;
                         anInt1310 = actionId3;
                         selectedItemName = ItemDefinition.getDefinition(actionId3).name;
-                        anInt1161 = 0;
+                        selectedSpell = 0;
                         redrawTab = true;
                     } else {
                         if (menuActionId == 1226) {
@@ -4727,7 +4727,7 @@ public class Game extends GameShell {
                             sendMessage(string, 0, "");
                         }
                         selectedItem = 0;
-                        anInt1161 = 0;
+                        selectedSpell = 0;
                         redrawTab = true;
                     }
                 }
@@ -4778,7 +4778,7 @@ public class Game extends GameShell {
     public final void processClickingGame() {
         do {
             try {
-                if (selectedItem == 0 && anInt1161 == 0) {
+                if (selectedItem == 0 && selectedSpell == 0) {
                     menuActionNames[menuActionRow] = "Walk here";
                     menuActionIds[menuActionRow] = 516;
                     menuActionIds2[menuActionRow] = mouseEventX;
@@ -4810,9 +4810,9 @@ public class Game extends GameShell {
                                 menuActionIds2[menuActionRow] = i_402_;
                                 menuActionIds3[menuActionRow] = i_403_;
                                 menuActionRow++;
-                            } else if (anInt1161 == 1) {
+                            } else if (selectedSpell == 1) {
                                 if ((anInt1163 & 0x4) == 4) {
-                                    menuActionNames[menuActionRow] = aString1164 + " @cya@" + gameobjectdefinition.name;
+                                    menuActionNames[menuActionRow] = selectedSpellName + " @cya@" + gameobjectdefinition.name;
                                     menuActionIds[menuActionRow] = 956;
                                     menuActionIds1[menuActionRow] = i_401_;
                                     menuActionIds2[menuActionRow] = i_402_;
@@ -4914,9 +4914,9 @@ public class Game extends GameShell {
                                         menuActionIds2[menuActionRow] = i_402_;
                                         menuActionIds3[menuActionRow] = i_403_;
                                         menuActionRow++;
-                                    } else if (anInt1161 == 1) {
+                                    } else if (selectedSpell == 1) {
                                         if ((anInt1163 & 0x1) == 1) {
-                                            menuActionNames[menuActionRow] = aString1164 + " @lre@"
+                                            menuActionNames[menuActionRow] = selectedSpellName + " @lre@"
                                                     + itemdefinition.name;
                                             menuActionIds[menuActionRow] = 94;
                                             menuActionIds1[menuActionRow] = item.itemId;
@@ -6150,7 +6150,7 @@ public class Game extends GameShell {
                     chatboxMessages[i_472_] = null;
                 }
                 selectedItem = 0;
-                anInt1161 = 0;
+                selectedSpell = 0;
                 anInt1048 = 0;
                 trackCount = 0;
                 anInt1303 = (int) (Math.random() * 100.0) - 50;
@@ -6652,9 +6652,9 @@ public class Game extends GameShell {
                         menuActionIds2[menuActionRow] = i_524_;
                         menuActionIds3[menuActionRow] = i_523_;
                         menuActionRow++;
-                    } else if (anInt1161 == 1) {
+                    } else if (selectedSpell == 1) {
                         if ((anInt1163 & 0x2) == 2) {
-                            menuActionNames[menuActionRow] = aString1164 + " @yel@" + string;
+                            menuActionNames[menuActionRow] = selectedSpellName + " @yel@" + string;
                             menuActionIds[menuActionRow] = 413;
                             menuActionIds1[menuActionRow] = i;
                             menuActionIds2[menuActionRow] = i_524_;
@@ -6753,9 +6753,9 @@ public class Game extends GameShell {
                     menuActionIds2[menuActionRow] = i;
                     menuActionIds3[menuActionRow] = i_529_;
                     menuActionRow++;
-                } else if (anInt1161 == 1) {
+                } else if (selectedSpell == 1) {
                     if ((anInt1163 & 0x8) == 8) {
-                        menuActionNames[menuActionRow] = aString1164 + " @whi@" + string;
+                        menuActionNames[menuActionRow] = selectedSpellName + " @whi@" + string;
                         menuActionIds[menuActionRow] = 365;
                         menuActionIds1[menuActionRow] = i_528_;
                         menuActionIds2[menuActionRow] = i;
@@ -9570,13 +9570,13 @@ public class Game extends GameShell {
     }
 
     public final void processClickingInteractions() {
-        if (menuActionRow >= 2 || selectedItem != 0 || anInt1161 != 0) {
+        if (menuActionRow >= 2 || selectedItem != 0 || selectedSpell != 0) {
             String action;
 
             if (selectedItem == 1 && menuActionRow < 2) {
                 action = "Use " + selectedItemName + " with...";
-            } else if (anInt1161 == 1 && menuActionRow < 2) {
-                action = aString1164 + "...";
+            } else if (selectedSpell == 1 && menuActionRow < 2) {
+                action = selectedSpellName + "...";
             } else {
                 action = menuActionNames[menuActionRow - 1];
             }
