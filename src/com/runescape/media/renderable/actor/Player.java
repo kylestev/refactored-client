@@ -312,10 +312,7 @@ public class Player extends Actor {
 
     @Override
     public final boolean isVisible() {
-        if (!visible) {
-            return false;
-        }
-        return true;
+        return visible;
     }
 
     public final Model getHeadModel() {
