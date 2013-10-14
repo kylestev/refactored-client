@@ -119,7 +119,6 @@ public class Game extends GameShell {
     private boolean aBoolean897 = false;
     private final int[] anIntArray898 = new int[5];
     private int trackId = -1;
-    private final int anInt900 = -680;
     private final boolean[] aBooleanArray901 = new boolean[5];
     private int playerWeight;
     protected MouseCapturer mouseCapturer;
@@ -1698,7 +1697,7 @@ public class Game extends GameShell {
                         int i_144_ = 30;
                         Player player = (Player) actor;
                         if (player.headIcon != 0) {
-                            method127(true, actor, actor.modelHeight + 15);
+                            method127(actor, actor.modelHeight + 15);
                             if (anInt988 > -1) {
                                 for (int i_145_ = 0; i_145_ < 8; i_145_++) {
                                     if ((player.headIcon & 1 << i_145_) != 0) {
@@ -1709,7 +1708,7 @@ public class Game extends GameShell {
                             }
                         }
                         if (i_143_ >= 0 && hintIconType == 10 && hintIconId == anIntArray917[i_143_]) {
-                            method127(true, actor, actor.modelHeight + 15);
+                            method127(actor, actor.modelHeight + 15);
                             if (anInt988 > -1) {
                                 anImageRGBArray1120[7].drawImage(anInt988 - 12, anInt989 - i_144_);
                             }
@@ -1717,14 +1716,14 @@ public class Game extends GameShell {
                     } else {
                         ActorDefinition npcdefinition = ((Npc) actor).npcDefinition;
                         if (npcdefinition.headIcon >= 0 && npcdefinition.headIcon < anImageRGBArray1120.length) {
-                            method127(true, actor, actor.modelHeight + 15);
+                            method127(actor, actor.modelHeight + 15);
                             if (anInt988 > -1) {
                                 anImageRGBArray1120[npcdefinition.headIcon].drawImage(anInt988 - 12, anInt989 - 30);
                             }
                         }
                         if (hintIconType == 1 && hintIconActorId == anIntArray862[i_143_ - playerCount]
                                 && Game.currentCycle % 20 < 10) {
-                            method127(true, actor, actor.modelHeight + 15);
+                            method127(actor, actor.modelHeight + 15);
                             if (anInt988 > -1) {
                                 anImageRGBArray1120[2].drawImage(anInt988 - 12, anInt989 - 28);
                             }
@@ -1733,7 +1732,7 @@ public class Game extends GameShell {
                     if (actor.forcedChat != null
                             && (i_143_ >= playerCount || publicChatSetting == 0 || publicChatSetting == 3 || publicChatSetting == 1
                             && method109(false, ((Player) actor).playerName))) {
-                        method127(true, actor, actor.modelHeight);
+                        method127(actor, actor.modelHeight);
                         if (anInt988 > -1 && anInt999 < anInt1000) {
                             anIntArray1004[anInt999] = fontBold.getStringWidth(actor.forcedChat) / 2;
                             anIntArray1003[anInt999] = fontBold.characterDefaultHeight;
@@ -1756,7 +1755,7 @@ public class Game extends GameShell {
                         }
                     }
                     if (actor.endCycle > Game.currentCycle) {
-                        method127(true, actor, actor.modelHeight + 15);
+                        method127(actor, actor.modelHeight + 15);
                         if (anInt988 > -1) {
                             int i_146_ = actor.maxHealth * 30 / actor.currentHealth;
                             if (i_146_ > 30) {
@@ -1769,7 +1768,7 @@ public class Game extends GameShell {
                     }
                     for (int i_147_ = 0; i_147_ < 4; i_147_++) {
                         if (actor.hitCycles[i_147_] > Game.currentCycle) {
-                            method127(true, actor, actor.modelHeight / 2);
+                            method127(actor, actor.modelHeight / 2);
                             if (anInt988 > -1) {
                                 if (i_147_ == 1) {
                                     anInt989 -= 20;
@@ -3181,23 +3180,18 @@ public class Game extends GameShell {
         }
     }
 
-    public final void method61() {
-        do {
-            try {
-                if (hintIconType == 2) {
-                    method128((hintIconX - regionAbsoluteBaseX << 7) + anInt962, hintIconOffset * 2, anInt900,
-                            (hintIconY - regionAbsoluteBaseY << 7) + anInt963);
-                    if (anInt988 <= -1 || Game.currentCycle % 20 >= 10) {
-                        break;
-                    }
-                    anImageRGBArray1120[2].drawImage(anInt988 - 12, anInt989 - 28);
-                }
-            } catch (RuntimeException runtimeexception) {
-                SignLink.reportError("10525, " + runtimeexception.toString());
-                throw new RuntimeException();
+    public final void drawHintIconType2() {
+        if (hintIconType == 2) {
+            method128((hintIconX - regionAbsoluteBaseX << 7) + anInt962,
+                        (hintIconY - regionAbsoluteBaseY << 7) + anInt963,
+                        hintIconOffset * 2);
+
+            if (anInt988 <= -1 || Game.currentCycle % 20 >= 10) {
+                return;
             }
-            break;
-        } while (false);
+
+            anImageRGBArray1120[2].drawImage(anInt988 - 12, anInt989 - 28);
+        }
     }
 
     public final void processGame() {
@@ -9736,53 +9730,37 @@ public class Game extends GameShell {
         }
     }
 
-    public final void method127(boolean bool, Actor actor, int i) {
-        try {
-            if (!bool) {
-                opcode = inBuffer.getUnsignedByte();
-            }
-            method128(actor.xWithBoundary, i, anInt900, actor.yWithBoundary);
-        } catch (RuntimeException runtimeexception) {
-            SignLink.reportError("30100, " + bool + ", " + actor + ", " + i + ", " + runtimeexception.toString());
-            throw new RuntimeException();
-        }
+    public final void method127(final Actor actor, final int x) {
+        method128(actor.xWithBoundary, actor.yWithBoundary, x);
     }
 
-    public final void method128(int i, int i_794_, int i_795_, int i_796_) {
-        try {
-            if (i < 128 || i_796_ < 128 || i > 13056 || i_796_ > 13056) {
+    public final void method128(int boundaryX, int boundaryY, int x) {
+        if (boundaryX < 128 || boundaryY < 128 || boundaryX > 13056 || boundaryY > 13056) {
+            anInt988 = -1;
+            anInt989 = -1;
+        } else {
+            int i_797_ = method42(currentSceneId, boundaryY, true, boundaryX) - x;
+            boundaryX -= anInt883;
+            i_797_ -= anInt884;
+            boundaryY -= anInt885;
+            int i_798_ = Model.SINE[anInt886];
+            int i_799_ = Model.COSINE[anInt886];
+            int i_800_ = Model.SINE[anInt887];
+            int i_801_ = Model.COSINE[anInt887];
+            int i_802_ = boundaryY * i_800_ + boundaryX * i_801_ >> 16;
+            boundaryY = boundaryY * i_801_ - boundaryX * i_800_ >> 16;
+            boundaryX = i_802_;
+
+            i_802_ = i_797_ * i_799_ - boundaryY * i_798_ >> 16;
+            boundaryY = i_797_ * i_798_ + boundaryY * i_799_ >> 16;
+            i_797_ = i_802_;
+            if (boundaryY >= 50) {
+                anInt988 = Rasterizer3D.centerX + (boundaryX << 9) / boundaryY;
+                anInt989 = Rasterizer3D.centerY + (i_797_ << 9) / boundaryY;
+            } else {
                 anInt988 = -1;
                 anInt989 = -1;
-            } else {
-                int i_797_ = method42(currentSceneId, i_796_, true, i) - i_794_;
-                i -= anInt883;
-                i_797_ -= anInt884;
-                i_796_ -= anInt885;
-                int i_798_ = Model.SINE[anInt886];
-                int i_799_ = Model.COSINE[anInt886];
-                int i_800_ = Model.SINE[anInt887];
-                int i_801_ = Model.COSINE[anInt887];
-                int i_802_ = i_796_ * i_800_ + i * i_801_ >> 16;
-                i_796_ = i_796_ * i_801_ - i * i_800_ >> 16;
-                i = i_802_;
-                if (i_795_ >= 0) {
-                    outBuffer.put(27);
-                }
-                i_802_ = i_797_ * i_799_ - i_796_ * i_798_ >> 16;
-                i_796_ = i_797_ * i_798_ + i_796_ * i_799_ >> 16;
-                i_797_ = i_802_;
-                if (i_796_ >= 50) {
-                    anInt988 = Rasterizer3D.centerX + (i << 9) / i_796_;
-                    anInt989 = Rasterizer3D.centerY + (i_797_ << 9) / i_796_;
-                } else {
-                    anInt988 = -1;
-                    anInt989 = -1;
-                }
             }
-        } catch (RuntimeException runtimeexception) {
-            SignLink.reportError("97939, " + i + ", " + i_794_ + ", " + i_795_ + ", " + i_796_ + ", "
-                    + runtimeexception.toString());
-            throw new RuntimeException();
         }
     }
 
@@ -12149,7 +12127,7 @@ public class Game extends GameShell {
             currentScene.method535(anInt883, anInt885, anInt887, anInt884, i, anInt886, false);
             currentScene.method510();
             method34();
-            method61();
+            drawHintIconType2();
             method37(854, i_1188_);
             method112();
             currentSceneBuffer.drawGraphics(4, 4, gameGraphics);
