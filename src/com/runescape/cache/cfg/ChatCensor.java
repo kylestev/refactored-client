@@ -8,164 +8,164 @@ import com.runescape.net.Buffer;
  */
 
 public class ChatCensor {
-	private static int[] fragments;
-	private static char[][] badWords;
-	private static byte[][][] badBytes;
-	private static char[][] domains;
-	private static char[][] topLevelDomains;
-	private static int[] topLevelDomainsType;
-	private static final String[] WHITELISTED_WORDS = { "cook", "cook's", "cooks", "seeks", "sheet", "woop", "woops",
-			"faq", "noob", "noobs" };
+    private static int[] fragments;
+    private static char[][] badWords;
+    private static byte[][][] badBytes;
+    private static char[][] domains;
+    private static char[][] topLevelDomains;
+    private static int[] topLevelDomainsType;
+    private static final String[] WHITELISTED_WORDS = {"cook", "cook's", "cooks", "seeks", "sheet", "woop", "woops",
+            "faq", "noob", "noobs"};
 
-	public static final void load(final Archive archive) {
-		final Buffer fragmentsEnc = new Buffer(archive.getFile("fragmentsenc.txt"));
-		final Buffer badEnc = new Buffer(archive.getFile("badenc.txt"));
-		final Buffer domainEnc = new Buffer(archive.getFile("domainenc.txt"));
-		final Buffer topLevelDomainsBuffer = new Buffer(archive.getFile("tldlist.txt"));
-		ChatCensor.loadDictionaries(fragmentsEnc, badEnc, domainEnc, topLevelDomainsBuffer);
-	}
+    public static final void load(final Archive archive) {
+        final Buffer fragmentsEnc = new Buffer(archive.getFile("fragmentsenc.txt"));
+        final Buffer badEnc = new Buffer(archive.getFile("badenc.txt"));
+        final Buffer domainEnc = new Buffer(archive.getFile("domainenc.txt"));
+        final Buffer topLevelDomainsBuffer = new Buffer(archive.getFile("tldlist.txt"));
+        ChatCensor.loadDictionaries(fragmentsEnc, badEnc, domainEnc, topLevelDomainsBuffer);
+    }
 
-	private static final void loadDictionaries(final Buffer fragmentsEnc, final Buffer badEnc, final Buffer domainEnc,
-			final Buffer topLevelDomainsBuffer) {
-		ChatCensor.loadBadEnc(badEnc);
-		ChatCensor.loadDomainEnc(domainEnc);
-		ChatCensor.loadFragmentsEnc(fragmentsEnc);
-		ChatCensor.loadTopLevelDomains(topLevelDomainsBuffer);
-	}
+    private static final void loadDictionaries(final Buffer fragmentsEnc, final Buffer badEnc, final Buffer domainEnc,
+                                               final Buffer topLevelDomainsBuffer) {
+        ChatCensor.loadBadEnc(badEnc);
+        ChatCensor.loadDomainEnc(domainEnc);
+        ChatCensor.loadFragmentsEnc(fragmentsEnc);
+        ChatCensor.loadTopLevelDomains(topLevelDomainsBuffer);
+    }
 
-	private static final void loadTopLevelDomains(final Buffer buffer) {
-		final int length = buffer.getInt();
-		ChatCensor.topLevelDomains = new char[length][];
-		ChatCensor.topLevelDomainsType = new int[length];
-
-		for (int index = 0; index < length; index++) {
-			ChatCensor.topLevelDomainsType[index] = buffer.getUnsignedByte();
-			final char[] topLevelDomain = new char[buffer.getUnsignedByte()];
-
-			for (int character = 0; character < topLevelDomain.length; character++) {
-				topLevelDomain[character] = (char) buffer.getUnsignedByte();
-			}
-
-			ChatCensor.topLevelDomains[index] = topLevelDomain;
-		}
-	}
-
-	private static final void loadBadEnc(final Buffer buffer) {
-		final int length = buffer.getInt();
-		ChatCensor.badWords = new char[length][];
-		ChatCensor.badBytes = new byte[length][][];
-		ChatCensor.loadBadWords(buffer, ChatCensor.badWords, ChatCensor.badBytes);
-	}
-
-	private static final void loadDomainEnc(final Buffer buffer) {
-		final int length = buffer.getInt();
-		ChatCensor.domains = new char[length][];
-		ChatCensor.loadDomains(ChatCensor.domains, buffer);
-	}
-
-	private static final void loadFragmentsEnc(final Buffer buffer) {
+    private static final void loadTopLevelDomains(final Buffer buffer) {
         final int length = buffer.getInt();
-		ChatCensor.fragments = new int[length];
+        ChatCensor.topLevelDomains = new char[length][];
+        ChatCensor.topLevelDomainsType = new int[length];
 
-		for (int index = 0; index < ChatCensor.fragments.length; index++) {
-			ChatCensor.fragments[index] = buffer.getUnsignedLEShort();
-		}
-	}
+        for (int index = 0; index < length; index++) {
+            ChatCensor.topLevelDomainsType[index] = buffer.getUnsignedByte();
+            final char[] topLevelDomain = new char[buffer.getUnsignedByte()];
 
-	private static final void loadBadWords(final Buffer buffer, final char[][] badWords, final byte[][][] badBytes) {
-		for (int index = 0; index < badWords.length; index++) {
-			final char[] badWord = new char[buffer.getUnsignedByte()];
-			for (int i = 0; i < badWord.length; i++) {
-				badWord[i] = (char) buffer.getUnsignedByte();
-			}
+            for (int character = 0; character < topLevelDomain.length; character++) {
+                topLevelDomain[character] = (char) buffer.getUnsignedByte();
+            }
+
+            ChatCensor.topLevelDomains[index] = topLevelDomain;
+        }
+    }
+
+    private static final void loadBadEnc(final Buffer buffer) {
+        final int length = buffer.getInt();
+        ChatCensor.badWords = new char[length][];
+        ChatCensor.badBytes = new byte[length][][];
+        ChatCensor.loadBadWords(buffer, ChatCensor.badWords, ChatCensor.badBytes);
+    }
+
+    private static final void loadDomainEnc(final Buffer buffer) {
+        final int length = buffer.getInt();
+        ChatCensor.domains = new char[length][];
+        ChatCensor.loadDomains(ChatCensor.domains, buffer);
+    }
+
+    private static final void loadFragmentsEnc(final Buffer buffer) {
+        final int length = buffer.getInt();
+        ChatCensor.fragments = new int[length];
+
+        for (int index = 0; index < ChatCensor.fragments.length; index++) {
+            ChatCensor.fragments[index] = buffer.getUnsignedLEShort();
+        }
+    }
+
+    private static final void loadBadWords(final Buffer buffer, final char[][] badWords, final byte[][][] badBytes) {
+        for (int index = 0; index < badWords.length; index++) {
+            final char[] badWord = new char[buffer.getUnsignedByte()];
+            for (int i = 0; i < badWord.length; i++) {
+                badWord[i] = (char) buffer.getUnsignedByte();
+            }
 
             badWords[index] = badWord;
             final byte[][] badByte = new byte[buffer.getUnsignedByte()][2];
 
-			for (int i = 0; i < badByte.length; i++) {
-				badByte[i][0] = (byte) buffer.getUnsignedByte();
-				badByte[i][1] = (byte) buffer.getUnsignedByte();
-			}
+            for (int i = 0; i < badByte.length; i++) {
+                badByte[i][0] = (byte) buffer.getUnsignedByte();
+                badByte[i][1] = (byte) buffer.getUnsignedByte();
+            }
 
-			if (badByte.length > 0) {
-				badBytes[index] = badByte;
-			}
-		}
-	}
+            if (badByte.length > 0) {
+                badBytes[index] = badByte;
+            }
+        }
+    }
 
-	private static final void loadDomains(final char[][] cs, final Buffer buffer) {
-		for (int index = 0; index < cs.length; index++) {
-			char[] domainEnc = new char[buffer.getUnsignedByte()];
-			for (int character = 0; character < domainEnc.length; character++) {
-				domainEnc[character] = (char) buffer.getUnsignedByte();
-			}
-			cs[index] = domainEnc;
-		}
-	}
+    private static final void loadDomains(final char[][] cs, final Buffer buffer) {
+        for (int index = 0; index < cs.length; index++) {
+            char[] domainEnc = new char[buffer.getUnsignedByte()];
+            for (int character = 0; character < domainEnc.length; character++) {
+                domainEnc[character] = (char) buffer.getUnsignedByte();
+            }
+            cs[index] = domainEnc;
+        }
+    }
 
-	private static final void formatLegalCharacters(final char[] chars) {
-		int character = 0;
+    private static final void formatLegalCharacters(final char[] chars) {
+        int character = 0;
 
-		for (int i = 0; i < chars.length; i++) {
-			if (ChatCensor.isLegalCharacter(chars[i])) {
-				chars[character] = chars[i];
-			} else {
-				chars[character] = ' ';
-			}
+        for (int i = 0; i < chars.length; i++) {
+            if (ChatCensor.isLegalCharacter(chars[i])) {
+                chars[character] = chars[i];
+            } else {
+                chars[character] = ' ';
+            }
 
-			if (character == 0 || chars[character] != ' ' || chars[character - 1] != ' ') {
-				character++;
-			}
-		}
+            if (character == 0 || chars[character] != ' ' || chars[character - 1] != ' ') {
+                character++;
+            }
+        }
 
-		for (int i = character; i < chars.length; i++) {
-			chars[i] = ' ';
-		}
-	}
+        for (int i = character; i < chars.length; i++) {
+            chars[i] = ' ';
+        }
+    }
 
-	private static final boolean isLegalCharacter(final char c) {
-		return ((c >= ' ' && c <= '\u007f') || c == '\n'
+    private static final boolean isLegalCharacter(final char c) {
+        return ((c >= ' ' && c <= '\u007f') || c == '\n'
                 || c == '\t' || c == '\u00a3' || c == '\u20ac');
-	}
+    }
 
-	public static final String censorString(final String string) {
-		char[] censoredString = string.toCharArray();
-		ChatCensor.formatLegalCharacters(censoredString);
+    public static final String censorString(final String string) {
+        char[] censoredString = string.toCharArray();
+        ChatCensor.formatLegalCharacters(censoredString);
 
-		final String censoredStringTrimmed = new String(censoredString).trim();
+        final String censoredStringTrimmed = new String(censoredString).trim();
         final String censoredStringLowercase = censoredStringTrimmed.toLowerCase();
         censoredString = censoredStringTrimmed.toLowerCase().toCharArray();
 
-		ChatCensor.method193( censoredString);
-		ChatCensor.method188(censoredString, true);
-		ChatCensor.handleEmails(censoredString);
-		ChatCensor.method202(censoredString);
+        ChatCensor.method193(censoredString);
+        ChatCensor.method188(censoredString, true);
+        ChatCensor.handleEmails(censoredString);
+        ChatCensor.method202(censoredString);
 
-		for (String allowedWord : ChatCensor.WHITELISTED_WORDS) {
-			int idx = -1;
-			while ((idx = censoredStringLowercase.indexOf(allowedWord, idx + 1)) != -1) {
-				final char[] chars = allowedWord.toCharArray();
-				for (int i = 0; i < chars.length; i++) {
-					censoredString[i + idx] = chars[i];
-				}
-			}
-		}
+        for (String allowedWord : ChatCensor.WHITELISTED_WORDS) {
+            int idx = -1;
+            while ((idx = censoredStringLowercase.indexOf(allowedWord, idx + 1)) != -1) {
+                final char[] chars = allowedWord.toCharArray();
+                for (int i = 0; i < chars.length; i++) {
+                    censoredString[i + idx] = chars[i];
+                }
+            }
+        }
 
-		ChatCensor.mergeCensoredStrings(censoredString, censoredStringTrimmed.toCharArray());
-		ChatCensor.method187(censoredString);
+        ChatCensor.mergeCensoredStrings(censoredString, censoredStringTrimmed.toCharArray());
+        ChatCensor.method187(censoredString);
 
-		return new String(censoredString).trim();
-	}
+        return new String(censoredString).trim();
+    }
 
-	private static final void mergeCensoredStrings(final char[] chars, final char[] trimmed) {
+    private static final void mergeCensoredStrings(final char[] chars, final char[] trimmed) {
         for (int i = 0; i < trimmed.length; i++) {
             if (chars[i] != '*' && ChatCensor.isUpperCase(trimmed[i])) {
                 chars[i] = trimmed[i];
             }
         }
-	}
+    }
 
-	private static final void method187(final char[] chars) {
+    private static final void method187(final char[] chars) {
         boolean bool = true;
         for (int j = 0; j < chars.length; j++) {
             final char c = chars[j];
@@ -182,9 +182,9 @@ public class ChatCensor {
                 bool = true;
             }
         }
-	}
+    }
 
-	private static final void method188(final char[] chars, final boolean censor) {
+    private static final void method188(final char[] chars, final boolean censor) {
         if (censor) {
             for (int i = 0; i < 2; i++) {
                 for (int j = ChatCensor.badWords.length - 1; j >= 0; j--) {
@@ -192,13 +192,13 @@ public class ChatCensor {
                 }
             }
         }
-	}
+    }
 
-	private static final void handleEmails(final char[] chars) {
+    private static final void handleEmails(final char[] chars) {
         final char[] charsAtCopy = chars.clone();
         final char[] charsDotCopy = chars.clone();
-        final char[] AT_SIGN_CHARS = { '(', 'a', ')' };
-        final char[] DOT_CHARS = { 'd', 'o', 't' };
+        final char[] AT_SIGN_CHARS = {'(', 'a', ')'};
+        final char[] DOT_CHARS = {'d', 'o', 't'};
 
         ChatCensor.method197(null, charsAtCopy, AT_SIGN_CHARS);
         ChatCensor.method197(null, charsDotCopy, DOT_CHARS);
@@ -206,9 +206,9 @@ public class ChatCensor {
         for (int i = ChatCensor.domains.length - 1; i >= 0; i--) {
             ChatCensor.method190(chars, ChatCensor.domains[i], charsDotCopy, charsAtCopy);
         }
-	}
+    }
 
-	private static final void method190(final char[] chars, final char[] domain, final char[] cs_34_, final char[] cs_35_) {
+    private static final void method190(final char[] chars, final char[] domain, final char[] cs_34_, final char[] cs_35_) {
         if (domain.length <= chars.length) {
             int i_37_;
             for (int j = 0; j <= chars.length - domain.length; j += i_37_) {
@@ -261,9 +261,9 @@ public class ChatCensor {
                 }
             }
         }
-	}
+    }
 
-	private static final int method191(final char[] chars, final char[] cs_47_, final int idx) {
+    private static final int method191(final char[] chars, final char[] cs_47_, final int idx) {
         if (idx == 0) {
             return 2;
         }
@@ -292,9 +292,9 @@ public class ChatCensor {
         }
 
         return 0;
-	}
+    }
 
-	private static final int method192(final char[] chars, final int idx, final char[] cs_52_) {
+    private static final int method192(final char[] chars, final int idx, final char[] cs_52_) {
         if (idx + 1 == cs_52_.length) {
             return 2;
         }
@@ -326,13 +326,13 @@ public class ChatCensor {
         }
 
         return 0;
-	}
+    }
 
-	private static final void method193(final char[] chars) {
+    private static final void method193(final char[] chars) {
         final char[] charsCloneDot = chars.clone();
         final char[] charsCloneSlash = chars.clone();
-        final char[] CHARS_DOT = { 'd', 'o', 't' };
-        final char[] CHARS_SLASH = { 's', 'l', 'a', 's', 'h' };
+        final char[] CHARS_DOT = {'d', 'o', 't'};
+        final char[] CHARS_SLASH = {'s', 'l', 'a', 's', 'h'};
 
         ChatCensor.method197(null, charsCloneDot, CHARS_DOT);
         ChatCensor.method197(null, charsCloneSlash, CHARS_SLASH);
@@ -340,9 +340,9 @@ public class ChatCensor {
             ChatCensor.method194(charsCloneSlash, ChatCensor.topLevelDomains[i], ChatCensor.topLevelDomainsType[i],
                     charsCloneDot, chars);
         }
-	}
+    }
 
-	private static final void method194(final char[] chars, final char[] tld, final int tldType, final char[] cs_61_,
+    private static final void method194(final char[] chars, final char[] tld, final int tldType, final char[] cs_61_,
                                         final char[] cs_62_) {
         if (tld.length <= cs_62_.length) {
             int i_63_;
@@ -480,9 +480,9 @@ public class ChatCensor {
                 }
             }
         }
-	}
+    }
 
-	private static final int method195(final char[] cs, final int i_84_, final char[] cs_85_) {
+    private static final int method195(final char[] cs, final int i_84_, final char[] cs_85_) {
         if (i_84_ == 0) {
             return 2;
         }
@@ -511,9 +511,9 @@ public class ChatCensor {
         }
 
         return 0;
-	}
+    }
 
-	private static final int method196(final char[] chars, final char[] cs_89_, final int i) {
+    private static final int method196(final char[] chars, final char[] cs_89_, final int i) {
         if (i + 1 == chars.length) {
             return 2;
         }
@@ -544,9 +544,9 @@ public class ChatCensor {
         }
 
         return 0;
-	}
+    }
 
-	public static final void method197(final byte[][] _badBytes, final char[] chars, final char[] badWord) {
+    public static final void method197(final byte[][] _badBytes, final char[] chars, final char[] badWord) {
         if (badWord.length > chars.length) {
             return;
         }
@@ -707,9 +707,9 @@ public class ChatCensor {
                 }
             }
         }
-	}
+    }
 
-	private static final boolean method198(final byte smallChar, final byte[][] _badBytes, final byte current) {
+    private static final boolean method198(final byte smallChar, final byte[][] _badBytes, final byte current) {
         int i = 0;
         if (_badBytes[i][0] == smallChar && _badBytes[i][1] == current) {
             return true;
@@ -732,16 +732,15 @@ public class ChatCensor {
         } while (i != j && i + 1 != j);
 
         return false;
-	}
+    }
 
     /**
-     *
      * @param first
      * @param suspect
      * @param second
      * @return number of characters matched
      */
-	private static final int matchCharacterAliases(final char first, final char suspect, final char second) {
+    private static final int matchCharacterAliases(final char first, final char suspect, final char second) {
         if (suspect == first) {
             return 1;
         } else if (suspect == 'o' && first == '0') {
@@ -759,16 +758,15 @@ public class ChatCensor {
         }
 
         return 0;
-	}
+    }
 
     /**
-     *
      * @param second
      * @param first
      * @param aliasee
      * @return number of letters consumed
      */
-	private static final int checkLetter(final char second, final char first, final char aliasee) {
+    private static final int checkLetter(final char second, final char first, final char aliasee) {
         if (aliasee == first) {
             return 1;
         }
@@ -961,9 +959,9 @@ public class ChatCensor {
         }
 
         return 0;
-	}
+    }
 
-	private static final byte charTo5Bit(final char c) {
+    private static final byte charTo5Bit(final char c) {
         if (c >= 'a' && c <= 'z') {
             return (byte) (c - 'a' + '\001');
         } else if (c == '\'') {
@@ -974,9 +972,9 @@ public class ChatCensor {
 
         // default is space
         return (byte) 27;
-	}
+    }
 
-	private static final void method202(final char[] chars) {
+    private static final void method202(final char[] chars) {
         int i = 0;
         int i_129_ = 0;
         int startCensor = 0;
@@ -1020,9 +1018,9 @@ public class ChatCensor {
                 i_129_ = 0;
             }
         }
-	}
+    }
 
-	private static final int getFirstDigitIndex(final char[] chars, final int startIndex) {
+    private static final int getFirstDigitIndex(final char[] chars, final int startIndex) {
         for (int idx = startIndex; idx < chars.length && idx >= 0; idx++) {
             if (isDigit(chars[idx])) {
                 return idx;
@@ -1030,9 +1028,9 @@ public class ChatCensor {
         }
 
         return -1;
-	}
+    }
 
-	private static final int getFirstNonDigitIndex(final char[] chars, final int startIndex) {
+    private static final int getFirstNonDigitIndex(final char[] chars, final int startIndex) {
         for (int idx = startIndex; idx < chars.length && idx >= 0; idx++) {
             if (!isDigit(chars[idx])) {
                 return idx;
@@ -1040,37 +1038,37 @@ public class ChatCensor {
         }
 
         return chars.length;
-	}
+    }
 
-	private static final boolean isNonAlphaNumeric(final char c) {
+    private static final boolean isNonAlphaNumeric(final char c) {
         return !ChatCensor.isLetter(c) && !ChatCensor.isDigit(c);
-	}
+    }
 
-	private static final boolean matchesCharacterCheck(final char c) {
+    private static final boolean matchesCharacterCheck(final char c) {
         if (c < 'a' || c > 'z') {
             return true;
         }
 
         return (c == 'v' || c == 'x' || c == 'j' || c == 'q' || c == 'z');
-	}
+    }
 
-	private static final boolean isLetter(final char c) {
+    private static final boolean isLetter(final char c) {
         return isLowerCase(c) || isUpperCase(c);
-	}
+    }
 
-	private static final boolean isDigit(final char c) {
+    private static final boolean isDigit(final char c) {
         return (c >= '0' && c <= '9');
-	}
+    }
 
-	private static final boolean isLowerCase(final char c) {
+    private static final boolean isLowerCase(final char c) {
         return (c >= 'a' || c <= 'z');
-	}
+    }
 
-	private static final boolean isUpperCase(final char c) {
+    private static final boolean isUpperCase(final char c) {
         return (c >= 'A' || c <= 'Z');
-	}
+    }
 
-	private static final boolean handleFragments(final char[] chars) {
+    private static final boolean handleFragments(final char[] chars) {
         boolean numeric = true;
         for (int i = 0; i < chars.length; i++) {
             if (!ChatCensor.isDigit(chars[i]) && chars[i] != '\0') {
@@ -1103,9 +1101,9 @@ public class ChatCensor {
         } while (i != lastFragmentIndex && i + 1 != lastFragmentIndex);
 
         return false;
-	}
+    }
 
-	public static final int packString(final char[] chars) {
+    public static final int packString(final char[] chars) {
         if (chars.length > 6) {
             return 0;
         }
@@ -1125,5 +1123,5 @@ public class ChatCensor {
         }
 
         return packed;
-	}
+    }
 }
