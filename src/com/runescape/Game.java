@@ -3883,7 +3883,7 @@ public class Game extends GameShell {
         BufferedConnection bufferedconnection = bufferedConnection;
         loggedIn = false;
         anInt1063 = 0;
-        method84(username, password, true);
+        login(username, password, true);
 
         if (!loggedIn) {
             logout();
@@ -6067,7 +6067,7 @@ public class Game extends GameShell {
         }
     }
 
-    public final void method84(String username, String password, boolean loginType) {
+    public final void login(final String username, final String password, final boolean loginType) {
         SignLink.errorName = username;
         try {
             if (!loginType) {
@@ -6134,7 +6134,7 @@ public class Game extends GameShell {
                 } catch (Exception exception) {
 					/* empty */
                 }
-                method84(username, password, loginType);
+                login(username, password, loginType);
             } else if (loginResponse == 2) {
                 playerRights = bufferedConnection.read();
                 Game.flagged = bufferedConnection.read() == 1;
@@ -6298,7 +6298,7 @@ public class Game extends GameShell {
 						/* empty */
                     }
                 }
-                method84(username, password, loginType);
+                login(username, password, loginType);
             } else if (loginResponse == -1) {
                 if (i_469_ == 0) {
                     if (anInt1063 < 2) {
@@ -6308,7 +6308,7 @@ public class Game extends GameShell {
 							/* empty */
                         }
                         anInt1063++;
-                        method84(username, password, loginType);
+                        login(username, password, loginType);
                     } else {
                         loginMessage1 = "No response from loginserver";
                         loginMessage2 = "Please wait 1 minute and try again.";
@@ -10594,7 +10594,7 @@ public class Game extends GameShell {
                     if (clickType == 1 && clickX >= i_981_ - 75 && clickX <= i_981_ + 75 && clickY >= i_982_ - 20
                             && clickY <= i_982_ + 20) {
                         anInt1063 = 0;
-                        method84(username, password, false);
+                        login(username, password, false);
                         if (loggedIn) {
                             break;
                         }
