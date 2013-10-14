@@ -24,7 +24,7 @@ public class ChatCensor {
 	private static char[][] domains;
 	private static char[][] topLevelDomains;
 	private static int[] topLevelDomainsType;
-	private static final String[] aStringArray175 = { "cook", "cook's", "cooks", "seeks", "sheet", "woop", "woops",
+	private static final String[] WHITELISTED_WORDS = { "cook", "cook's", "cooks", "seeks", "sheet", "woop", "woops",
 			"faq", "noob", "noobs" };
 
 	public static final void load(Archive archive) {
@@ -143,7 +143,7 @@ public class ChatCensor {
 		ChatCensor.method189((byte) 0, censoredString);
 		ChatCensor.method202(censoredString, -511);
 
-		for (String allowedWord : ChatCensor.aStringArray175) {
+		for (String allowedWord : ChatCensor.WHITELISTED_WORDS) {
 			int idx = -1;
 			while ((idx = censoredStringLowercased.indexOf(allowedWord, idx + 1)) != -1) {
 				final char[] chars = allowedWord.toCharArray();
