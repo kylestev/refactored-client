@@ -244,7 +244,7 @@ public class Game extends GameShell {
     private int opcode;
     private int anInt1034;
     private int anInt1035;
-    private int anInt1036;
+    private int idleLogout;
     private final byte aByte1037 = 24;
     private LinkedList projectileList = new LinkedList();
     private int anInt1039;
@@ -2489,7 +2489,7 @@ public class Game extends GameShell {
             }
         }
         if (type == 205) {
-            anInt1036 = 250;
+            idleLogout = 250;
             return true;
         }
         if (type == 501) {
@@ -3206,8 +3206,8 @@ public class Game extends GameShell {
                 if (systemUpdateTime > 1) {
                     systemUpdateTime--;
                 }
-                if (anInt1036 > 0) {
-                    anInt1036--;
+                if (idleLogout > 0) {
+                    idleLogout--;
                 }
                 for (int i_304_ = 0; i_304_ < 5; i_304_++) {
                     if (!method145(true)) {
@@ -3339,7 +3339,7 @@ public class Game extends GameShell {
                     handleTrackLooping();
                     anInt1034++;
                     if (anInt1034 > 750) {
-                        method68(-670);
+                        dropClient();
                     }
                     method114();
                     method95();
@@ -3463,7 +3463,7 @@ public class Game extends GameShell {
                     method73(732);
                     idleTime++;
                     if (idleTime > 4500) {
-                        anInt1036 = 250;
+                        idleLogout = 250;
                         idleTime -= 500;
                         outBuffer.putOpcode(202);
                     }
@@ -3534,7 +3534,7 @@ public class Game extends GameShell {
                         outBuffer.offset = 0;
                         anInt1035 = 0;
                     } catch (IOException ioexception) {
-                        method68(-670);
+                        dropClient();
                     } catch (Exception exception) {
                         logout();
                     }
@@ -3865,38 +3865,34 @@ public class Game extends GameShell {
         }
     }
 
-    public final void method68(int i) {
+    public final void dropClient() {
+        if (idleLogout > 0) {
+            logout();
+            return;
+        }
+
+        currentSceneBuffer.createRasterizer();
+        fontNormal.drawStringLeft("Connection lost", 257, 144, 0);
+        fontNormal.drawStringLeft("Connection lost", 256, 143, 0xFFFFFF);
+        fontNormal.drawStringLeft("Please wait - attempting to reestablish", 257, 159, 0);
+        fontNormal.drawStringLeft("Please wait - attempting to reestablish", 256, 158, 0xFFFFFF);
+
+        currentSceneBuffer.drawGraphics(4, 4, gameGraphics);
+        minimapState = 0;
+        destinationX = 0;
+        BufferedConnection bufferedconnection = bufferedConnection;
+        loggedIn = false;
+        anInt1063 = 0;
+        method84(username, password, true);
+
+        if (!loggedIn) {
+            logout();
+        }
+
         try {
-            if (anInt1036 > 0) {
-                logout();
-            } else {
-                currentSceneBuffer.createRasterizer();
-                fontNormal.drawStringLeft("Connection lost", 257, 144, 0);
-                fontNormal.drawStringLeft("Connection lost", 256, 143, 0xFFFFFF);
-                fontNormal.drawStringLeft("Please wait - attempting to reestablish", 257, 159, 0);
-                fontNormal.drawStringLeft("Please wait - attempting to reestablish", 256, 158, 0xFFFFFF);
-                while (i >= 0) {
-                    outBuffer.put(164);
-                }
-                currentSceneBuffer.drawGraphics(4, 4, gameGraphics);
-                minimapState = 0;
-                destinationX = 0;
-                BufferedConnection bufferedconnection = bufferedConnection;
-                loggedIn = false;
-                anInt1063 = 0;
-                method84(username, password, true);
-                if (!loggedIn) {
-                    logout();
-                }
-                try {
-                    bufferedconnection.close();
-                } catch (Exception exception) {
-					/* empty */
-                }
-            }
-        } catch (RuntimeException runtimeexception) {
-            SignLink.reportError("43851, " + i + ", " + runtimeexception.toString());
-            throw new RuntimeException();
+            bufferedconnection.close();
+        } catch (Exception exception) {
+            /* empty */
         }
     }
 
@@ -5272,7 +5268,7 @@ public class Game extends GameShell {
                     if ((key == KeyEvent.VK_ENTER) && chatboxInput.length() > 0) {
                         if (playerRights == 0) {
                             if (chatboxInput.equals("::clientdrop")) {
-                                method68(-670);
+                                dropClient();
                             }
                             if (chatboxInput.equals("::lag")) {
                                 method72();
@@ -6157,7 +6153,7 @@ public class Game extends GameShell {
                 packetSize = 0;
                 anInt1034 = 0;
                 systemUpdateTime = 0;
-                anInt1036 = 0;
+                idleLogout = 0;
                 hintIconType = 0;
                 menuActionRow = 0;
                 actionMenuOpen = false;
@@ -12062,7 +12058,7 @@ public class Game extends GameShell {
                 SignLink.reportError("T1 - " + opcode + "," + packetSize + " - " + anInt867 + "," + anInt868);
                 logout();
             } catch (IOException ioexception) {
-                method68(-670);
+                dropClient();
             } catch (Exception exception) {
                 String string = "T2 - " + opcode + "," + anInt867 + "," + anInt868 + " - " + packetSize + ","
                         + (regionAbsoluteBaseX + Game.localPlayer.pathX[0]) + ","
