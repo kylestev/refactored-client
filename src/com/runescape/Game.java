@@ -8954,7 +8954,7 @@ public class Game extends GameShell {
 
         if (!actionMenuOpen) {
             processClickingAreas();
-            method125();
+            processClickingInteractions();
         } else if (actionMenuArea == 0) {
             drawActionMenu();
         }
@@ -9569,29 +9569,24 @@ public class Game extends GameShell {
         }
     }
 
-    public final void method125() {
-        do {
-            try {
-                if (menuActionRow >= 2 || anInt1307 != 0 || anInt1161 != 0) {
-                    String action;
-                    if (anInt1307 == 1 && menuActionRow < 2) {
-                        action = "Use " + aString1311 + " with...";
-                    } else if (anInt1161 == 1 && menuActionRow < 2) {
-                        action = aString1164 + "...";
-                    } else {
-                        action = menuActionNames[menuActionRow - 1];
-                    }
-                    if (menuActionRow > 2) {
-                        action += "@whi@ / " + (menuActionRow - 2) + " more options";
-                    }
-                    fontBold.drawShadowedSeededAlphaString(action, 4, 15, Game.currentCycle / 1000, 0xFFFFFF);
-                }
-            } catch (RuntimeException runtimeexception) {
-                SignLink.reportError("86922, " + runtimeexception.toString());
-                throw new RuntimeException();
+    public final void processClickingInteractions() {
+        if (menuActionRow >= 2 || anInt1307 != 0 || anInt1161 != 0) {
+            String action;
+
+            if (anInt1307 == 1 && menuActionRow < 2) {
+                action = "Use " + aString1311 + " with...";
+            } else if (anInt1161 == 1 && menuActionRow < 2) {
+                action = aString1164 + "...";
+            } else {
+                action = menuActionNames[menuActionRow - 1];
             }
-            break;
-        } while (false);
+
+            if (menuActionRow > 2) {
+                action += "@whi@ / " + (menuActionRow - 2) + " more options";
+            }
+
+            fontBold.drawShadowedSeededAlphaString(action, 4, 15, Game.currentCycle / 1000, 0xFFFFFF);
+        }
     }
 
     public final void method126() {
