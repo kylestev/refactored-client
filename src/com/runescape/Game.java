@@ -494,11 +494,11 @@ public class Game extends GameShell {
     private int anInt1304 = 2;
     private int[] walkingQueueX = new int[4000];
     private int[] walkingQueueY = new int[4000];
-    private int anInt1307;
+    private int selectedItem;
     private int anInt1308;
     private int anInt1309;
     private int anInt1310;
-    protected String aString1311;
+    protected String selectedItemName;
     private int publicChatSetting;
     private static int currentWalkingQueueSize;
     private int trackLoops = -1;
@@ -1353,9 +1353,9 @@ public class Game extends GameShell {
                                         if (widgetChild.items[i_121_] > 0) {
                                             ItemDefinition itemdefinition = ItemDefinition
                                                     .getDefinition(widgetChild.items[i_121_] - 1);
-                                            if (anInt1307 == 1 && widgetChild.isInventory) {
+                                            if (selectedItem == 1 && widgetChild.isInventory) {
                                                 if (widgetChild.id != anInt1309 || i_121_ != anInt1308) {
-                                                    menuActionNames[menuActionRow] = "Use " + aString1311
+                                                    menuActionNames[menuActionRow] = "Use " + selectedItemName
                                                             + " with @lre@" + itemdefinition.name;
                                                     menuActionIds[menuActionRow] = 870;
                                                     menuActionIds1[menuActionRow] = itemdefinition.id;
@@ -4196,7 +4196,7 @@ public class Game extends GameShell {
                     anInt1161 = 1;
                     spellId = actionId2;
                     anInt1163 = widget.spellUsableOn;
-                    anInt1307 = 0;
+                    selectedItem = 0;
                     redrawTab = true;
                     String string = widget.selectedActionName;
                     if (string.indexOf(" ") != -1) {
@@ -4681,11 +4681,11 @@ public class Game extends GameShell {
                         }
                     }
                     if (menuActionId == 447) {
-                        anInt1307 = 1;
+                        selectedItem = 1;
                         anInt1308 = actionId1;
                         anInt1309 = actionId2;
                         anInt1310 = actionId3;
-                        aString1311 = ItemDefinition.getDefinition(actionId3).name;
+                        selectedItemName = ItemDefinition.getDefinition(actionId3).name;
                         anInt1161 = 0;
                         redrawTab = true;
                     } else {
@@ -4726,7 +4726,7 @@ public class Game extends GameShell {
                             }
                             sendMessage(string, 0, "");
                         }
-                        anInt1307 = 0;
+                        selectedItem = 0;
                         anInt1161 = 0;
                         redrawTab = true;
                     }
@@ -4778,7 +4778,7 @@ public class Game extends GameShell {
     public final void processClickingGame() {
         do {
             try {
-                if (anInt1307 == 0 && anInt1161 == 0) {
+                if (selectedItem == 0 && anInt1161 == 0) {
                     menuActionNames[menuActionRow] = "Walk here";
                     menuActionIds[menuActionRow] = 516;
                     menuActionIds2[menuActionRow] = mouseEventX;
@@ -4802,8 +4802,8 @@ public class Game extends GameShell {
                             if (gameobjectdefinition == null) {
                                 continue;
                             }
-                            if (anInt1307 == 1) {
-                                menuActionNames[menuActionRow] = "Use " + aString1311 + " with @cya@"
+                            if (selectedItem == 1) {
+                                menuActionNames[menuActionRow] = "Use " + selectedItemName + " with @cya@"
                                         + gameobjectdefinition.name;
                                 menuActionIds[menuActionRow] = 62;
                                 menuActionIds1[menuActionRow] = i_401_;
@@ -4906,8 +4906,8 @@ public class Game extends GameShell {
                                 for (Item item = (Item) linkedlist.getFront(); item != null; item = (Item) linkedlist
                                         .getNext()) {
                                     ItemDefinition itemdefinition = ItemDefinition.getDefinition(item.itemId);
-                                    if (anInt1307 == 1) {
-                                        menuActionNames[menuActionRow] = "Use " + aString1311 + " with @lre@"
+                                    if (selectedItem == 1) {
+                                        menuActionNames[menuActionRow] = "Use " + selectedItemName + " with @lre@"
                                                 + itemdefinition.name;
                                         menuActionIds[menuActionRow] = 511;
                                         menuActionIds1[menuActionRow] = item.itemId;
@@ -6149,7 +6149,7 @@ public class Game extends GameShell {
                 for (int i_472_ = 0; i_472_ < 100; i_472_++) {
                     chatboxMessages[i_472_] = null;
                 }
-                anInt1307 = 0;
+                selectedItem = 0;
                 anInt1161 = 0;
                 anInt1048 = 0;
                 trackCount = 0;
@@ -6645,8 +6645,8 @@ public class Game extends GameShell {
                         string += Game.method110(Game.localPlayer.combatLevel, npcdefinition.combatLevel, true)
                                 + " (level-" + npcdefinition.combatLevel + ")";
                     }
-                    if (anInt1307 == 1) {
-                        menuActionNames[menuActionRow] = "Use " + aString1311 + " with @yel@" + string;
+                    if (selectedItem == 1) {
+                        menuActionNames[menuActionRow] = "Use " + selectedItemName + " with @yel@" + string;
                         menuActionIds[menuActionRow] = 582;
                         menuActionIds1[menuActionRow] = i;
                         menuActionIds2[menuActionRow] = i_524_;
@@ -6746,8 +6746,8 @@ public class Game extends GameShell {
                 } else {
                     string = player.playerName + " (skill-" + player.skillLevel + ")";
                 }
-                if (anInt1307 == 1) {
-                    menuActionNames[menuActionRow] = "Use " + aString1311 + " with @whi@" + string;
+                if (selectedItem == 1) {
+                    menuActionNames[menuActionRow] = "Use " + selectedItemName + " with @whi@" + string;
                     menuActionIds[menuActionRow] = 491;
                     menuActionIds1[menuActionRow] = i_528_;
                     menuActionIds2[menuActionRow] = i;
@@ -8240,7 +8240,7 @@ public class Game extends GameShell {
                                                 && i_640_ > Rasterizer.topY - 32 && i_640_ < Rasterizer.bottomY
                                                 || anInt1111 != 0 && anInt1110 == i_636_) {
                                             int i_644_ = 0;
-                                            if (anInt1307 == 1 && anInt1308 == i_636_ && anInt1309 == widget_635_.id) {
+                                            if (selectedItem == 1 && anInt1308 == i_636_ && anInt1309 == widget_635_.id) {
                                                 i_644_ = 0xFFFFFF;
                                             }
                                             ImageRGB imagergb = ItemDefinition.getSprite(i_643_,
@@ -9570,11 +9570,11 @@ public class Game extends GameShell {
     }
 
     public final void processClickingInteractions() {
-        if (menuActionRow >= 2 || anInt1307 != 0 || anInt1161 != 0) {
+        if (menuActionRow >= 2 || selectedItem != 0 || anInt1161 != 0) {
             String action;
 
-            if (anInt1307 == 1 && menuActionRow < 2) {
-                action = "Use " + aString1311 + " with...";
+            if (selectedItem == 1 && menuActionRow < 2) {
+                action = "Use " + selectedItemName + " with...";
             } else if (anInt1161 == 1 && menuActionRow < 2) {
                 action = aString1164 + "...";
             } else {
