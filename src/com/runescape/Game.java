@@ -278,7 +278,7 @@ public class Game extends GameShell {
     private final int[] skillMaxLevel = new int[SkillConstants.SKILL_COUNT];
     private final int[] defaultSettings = new int[2000];
     private int anInt1071;
-    private boolean characterEditChangeGenger = true;
+    private boolean characterEditChangeGender = true;
     private int anInt1073;
     private String aString1074;
     private static int anInt1076;
@@ -2334,7 +2334,7 @@ public class Game extends GameShell {
                 characterEditIdentityKits[i_208_] = -1;
                 for (int i_209_ = 0; i_209_ < IdentityKit.count; i_209_++) {
                     if (!IdentityKit.cache[i_209_].widgetDisplayed
-                            && IdentityKit.cache[i_209_].partId == i_208_ + (characterEditChangeGenger ? 0 : 7)) {
+                            && IdentityKit.cache[i_209_].partId == i_208_ + (characterEditChangeGender ? 0 : 7)) {
                         characterEditIdentityKits[i_208_] = i_209_;
                         break;
                     }
@@ -2521,7 +2521,7 @@ public class Game extends GameShell {
                         i_225_ = 0;
                     }
                 } while (IdentityKit.cache[i_225_].widgetDisplayed
-                        || IdentityKit.cache[i_225_].partId != i_223_ + (characterEditChangeGenger ? 0 : 7));
+                        || IdentityKit.cache[i_225_].partId != i_223_ + (characterEditChangeGender ? 0 : 7));
                 characterEditIdentityKits[i_223_] = i_225_;
                 aBoolean1056 = true;
             }
@@ -2539,17 +2539,17 @@ public class Game extends GameShell {
             characterEditColors[i_226_] = i_228_;
             aBoolean1056 = true;
         }
-        if (type == 324 && !characterEditChangeGenger) {
-            characterEditChangeGenger = true;
+        if (type == 324 && !characterEditChangeGender) {
+            characterEditChangeGender = true;
             characterChangeGenger(0);
         }
-        if (type == 325 && characterEditChangeGenger) {
-            characterEditChangeGenger = false;
+        if (type == 325 && characterEditChangeGender) {
+            characterEditChangeGender = false;
             characterChangeGenger(0);
         }
         if (type == 326) {
             outBuffer.putOpcode(101);
-            outBuffer.put(characterEditChangeGenger ? 0 : 1);
+            outBuffer.put(characterEditChangeGender ? 0 : 1);
             for (int identityKit = 0; identityKit < 7; identityKit++) {
                 outBuffer.put(characterEditIdentityKits[identityKit]);
             }
@@ -5615,7 +5615,7 @@ public class Game extends GameShell {
                         anImageRGB956 = widget.disabledImage;
                         anImageRGB957 = widget.enabledImage;
                     }
-                    if (characterEditChangeGenger) {
+                    if (characterEditChangeGender) {
                         widget.disabledImage = anImageRGB957;
                     } else {
                         widget.disabledImage = anImageRGB956;
@@ -5625,7 +5625,7 @@ public class Game extends GameShell {
                         anImageRGB956 = widget.disabledImage;
                         anImageRGB957 = widget.enabledImage;
                     }
-                    if (characterEditChangeGenger) {
+                    if (characterEditChangeGender) {
                         widget.disabledImage = anImageRGB956;
                     } else {
                         widget.disabledImage = anImageRGB957;
@@ -6214,7 +6214,7 @@ public class Game extends GameShell {
                 aString869 = null;
                 anInt1080 = 0;
                 flashingSidebar = -1;
-                characterEditChangeGenger = true;
+                characterEditChangeGender = true;
                 characterChangeGenger(0);
                 for (int i_478_ = 0; i_478_ < 5; i_478_++) {
                     characterEditColors[i_478_] = 0;
