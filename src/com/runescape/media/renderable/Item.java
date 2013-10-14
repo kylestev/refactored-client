@@ -5,12 +5,12 @@ import com.runescape.cache.media.Model;
 
 public class Item extends Renderable {
 
-	public int itemId;
-	public int itemCount;
+    public int itemId;
+    public int itemCount;
 
-	@Override
-	public final Model getRotatedModel() {
-		final ItemDefinition itemDef = ItemDefinition.getDefinition(itemId);
-		return itemDef != null ? itemDef.getAmountModel(itemCount) : null;
-	}
+    @Override
+    public final Model getRotatedModel() {
+        final ItemDefinition itemDef = ItemDefinition.getDefinition(itemId);
+        return itemDef != null ? itemDef.getAmountModel(itemCount) : null;
+    }
 }
