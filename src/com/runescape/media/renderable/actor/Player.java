@@ -311,7 +311,7 @@ public class Player extends Actor {
     }
 
     @Override
-    public final boolean isVisibile() {
+    public final boolean isVisible() {
         if (!visibile) {
             return false;
         }

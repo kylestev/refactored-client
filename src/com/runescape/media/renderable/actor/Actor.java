@@ -153,7 +153,7 @@ public class Actor extends Renderable {
         pathRun[0] = running;
     }
 
-    public boolean isVisibile() {
+    public boolean isVisible() {
         return false;
     }
 }

@@ -1218,7 +1218,7 @@ public class Game extends GameShell {
             for (int index = 0; index < actorCount; index++) {
                 Npc npc = localNpcs[anIntArray862[index]];
                 int i_108_ = 536870912 + (anIntArray862[index] << 14);
-                if (npc != null && npc.isVisibile() && npc.npcDefinition.visible == bool) {
+                if (npc != null && npc.isVisible() && npc.npcDefinition.visible == bool) {
                     int i_109_ = npc.xWithBoundary >> 7;
                     int i_110_ = npc.yWithBoundary >> 7;
                     if (i_109_ >= 0 && i_109_ < 104 && i_110_ >= 0 && i_110_ < 104) {
@@ -1684,7 +1684,7 @@ public class Game extends GameShell {
                 } else {
                     actor = localNpcs[anIntArray862[i_143_ - playerCount]];
                 }
-                if (actor != null && actor.isVisibile()) {
+                if (actor != null && actor.isVisible()) {
                     if (actor instanceof Npc) {
                         ActorDefinition npcdefinition = ((Npc) actor).npcDefinition;
                         if (npcdefinition.childrenIds != null) {
@@ -2429,7 +2429,7 @@ public class Game extends GameShell {
                     player = players[anIntArray917[i_218_]];
                     i_219_ = anIntArray917[i_218_] << 14;
                 }
-                if (player != null && player.isVisibile()) {
+                if (player != null && player.isVisible()) {
                     player.aBoolean1719 = false;
                     if ((Game.lowMemory && playerCount > 50 || playerCount > 200) && !bool
                             && player.anInt1537 == player.standAnimationId) {
@@ -9657,7 +9657,7 @@ public class Game extends GameShell {
 				/* Actors */
                 for (int i = 0; i < actorCount; i++) {
                     Npc npc = localNpcs[anIntArray862[i]];
-                    if (npc != null && npc.isVisibile()) {
+                    if (npc != null && npc.isVisible()) {
                         ActorDefinition definition = npc.npcDefinition;
                         if (definition.childrenIds != null) {
                             definition = definition.getChildDefinition();
@@ -9673,7 +9673,7 @@ public class Game extends GameShell {
 				/* Players */
                 for (int playerId = 0; playerId < playerCount; playerId++) {
                     Player player = players[anIntArray917[playerId]];
-                    if (player != null && player.isVisibile()) {
+                    if (player != null && player.isVisible()) {
                         mapX = player.xWithBoundary / 32 - Game.localPlayer.xWithBoundary / 32;
                         mapY = player.yWithBoundary / 32 - Game.localPlayer.yWithBoundary / 32;
                         boolean isFriend = false;

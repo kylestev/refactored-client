@@ -63,7 +63,7 @@ public class Npc extends Actor {
     }
 
     @Override
-    public final boolean isVisibile() {
+    public final boolean isVisible() {
         if (npcDefinition == null) {
             return false;
         }
