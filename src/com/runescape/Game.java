@@ -6756,11 +6756,11 @@ public class Game extends GameShell {
         try {
             if (player != Game.localPlayer && menuActionRow < 400 && !bool) {
                 String string;
-                if (player.anInt1743 == 0) {
+                if (player.skillLevel == 0) {
                     string = player.playerName + Game.method110(Game.localPlayer.combatLevel, player.combatLevel, true)
                             + " (level-" + player.combatLevel + ")";
                 } else {
-                    string = player.playerName + " (skill-" + player.anInt1743 + ")";
+                    string = player.playerName + " (skill-" + player.skillLevel + ")";
                 }
                 if (anInt1307 == 1) {
                     menuActionNames[menuActionRow] = "Use " + aString1311 + " with @whi@" + string;
