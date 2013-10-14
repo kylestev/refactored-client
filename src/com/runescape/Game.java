@@ -2858,7 +2858,7 @@ public class Game extends GameShell {
                 aLong849 = System.currentTimeMillis();
             }
             if (anInt1048 == 1) {
-                int i_276_ = method54();
+                int i_276_ = loadMapRegion();
                 if (i_276_ != 0 && System.currentTimeMillis() - aLong849 > 360000L) {
                     SignLink.reportError(username + " glcfb " + aLong1240 + "," + i_276_ + "," + Game.lowMemory + ","
                             + stores[0] + "," + onDemandRequester.immediateRequestCount() + "," + currentSceneId + ","
@@ -2877,44 +2877,47 @@ public class Game extends GameShell {
         }
     }
 
-    public final int method54() {
-        try {
-            for (int i = 0; i < aByteArrayArray1208.length; i++) {
-                if (aByteArrayArray1208[i] == null && anIntArray1260[i] != -1) {
-                    return -1;
-                }
-                if (aByteArrayArray1272[i] == null && anIntArray1261[i] != -1) {
-                    return -2;
-                }
+    public final int loadMapRegion() {
+        for (int i = 0; i < aByteArrayArray1208.length; i++) {
+            if (aByteArrayArray1208[i] == null && anIntArray1260[i] != -1) {
+                return -1;
             }
-            boolean bool = true;
-            for (int i = 0; i < aByteArrayArray1208.length; i++) {
-                byte[] bs = aByteArrayArray1272[i];
-                if (bs != null) {
-                    int i_277_ = (anIntArray1259[i] >> 8) * 64 - regionAbsoluteBaseX;
-                    int i_278_ = (anIntArray1259[i] & 0xff) * 64 - regionAbsoluteBaseY;
-                    if (aBoolean1184) {
-                        i_277_ = 10;
-                        i_278_ = 10;
-                    }
-                    bool &= Region.method471(i_277_, bs, i_278_, 6);
-                }
+
+            if (aByteArrayArray1272[i] == null && anIntArray1261[i] != -1) {
+                return -2;
             }
-            if (!bool) {
-                return -3;
-            }
-            if (aBoolean1105) {
-                return -4;
-            }
-            anInt1048 = 2;
-            Region.onBuildTimePlane = currentSceneId;
-            method22();
-            outBuffer.putOpcode(121);
-            return 0;
-        } catch (RuntimeException runtimeexception) {
-            SignLink.reportError("50361, " + runtimeexception.toString());
-            throw new RuntimeException();
         }
+
+        boolean result = true;
+        for (int i = 0; i < aByteArrayArray1208.length; i++) {
+            final byte[] bytes = aByteArrayArray1272[i];
+            if (bytes != null) {
+                int i_277_ = (anIntArray1259[i] >> 8) * 64 - regionAbsoluteBaseX;
+                int i_278_ = (anIntArray1259[i] & 0xff) * 64 - regionAbsoluteBaseY;
+
+                if (aBoolean1184) {
+                    i_277_ = 10;
+                    i_278_ = 10;
+                }
+
+                result &= Region.method471(i_277_, bytes, i_278_, 6);
+            }
+        }
+
+        if (!result) {
+            return -3;
+        }
+
+        if (aBoolean1105) {
+            return -4;
+        }
+
+        anInt1048 = 2;
+        Region.onBuildTimePlane = currentSceneId;
+        method22();
+        outBuffer.putOpcode(121);
+
+        return 0;
     }
 
     public final void updateProjectiles() {
