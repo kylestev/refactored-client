@@ -4085,7 +4085,7 @@ public class Game extends GameShell {
                             removeFriend(l);
                         }
                         if (menuActionId == 322) {
-                            removeIgnore(3, l);
+                            removeIgnore(l);
                         }
                     }
                 }
@@ -5200,7 +5200,7 @@ public class Game extends GameShell {
                         }
                         if (friendsListAction == 5 && ignoreListCount > 0) {
                             long l = TextUtils.nameToLong(chatMessage);
-                            removeIgnore(3, l);
+                            removeIgnore(l);
                         }
                     }
                 } else if (inputType == 1) {
