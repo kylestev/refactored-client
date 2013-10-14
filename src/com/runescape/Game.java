@@ -2213,44 +2213,40 @@ public class Game extends GameShell {
         }
     }
 
-    public final void method41(byte b, long l) {
-        try {
-            if (l != 0L) {
-                if (friendsListCount >= 100 && isMember != 1) {
-                    sendMessage("Your friendlist is full. Max of 100 for free users, and 200 for members", 0, "");
-                } else if (friendsListCount >= 200) {
-                    sendMessage("Your friendlist is full. Max of 100 for free users, and 200 for members", 0, "");
-                } else {
-                    String string = TextUtils.formatName(TextUtils.longToName(l));
-                    for (int i = 0; i < friendsListCount; i++) {
-                        if (friendsListLongs[i] == l) {
-                            sendMessage(string + " is already on your friend list", 0, "");
-                            return;
-                        }
-                    }
-                    if (b != 68) {
-                        opcode = -1;
-                    }
-                    for (int i = 0; i < ignoreListCount; i++) {
-                        if (ignoreList[i] == l) {
-                            sendMessage("Please remove " + string + " from your ignore list first", 0, "");
-                            return;
-                        }
-                    }
-                    if (!string.equals(Game.localPlayer.playerName)) {
-                        friendsListNames[friendsListCount] = string;
-                        friendsListLongs[friendsListCount] = l;
-                        friendsListWorlds[friendsListCount] = 0;
-                        friendsListCount++;
-                        redrawTab = true;
-                        outBuffer.putOpcode(188);
-                        outBuffer.putLong(l);
-                    }
+    public final void addToFriendsList(final long longUsername) {
+        if (longUsername == 0L) {
+            return;
+        }
+
+        if (friendsListCount >= 100 && isMember != 1) {
+            sendMessage("Your friendlist is full. Max of 100 for free users, and 200 for members", 0, "");
+        } else if (friendsListCount >= 200) {
+            sendMessage("Your friendlist is full. Max of 100 for free users, and 200 for members", 0, "");
+        } else {
+            final String usernameToAdd = TextUtils.formatName(TextUtils.longToName(longUsername));
+            for (int i = 0; i < friendsListCount; i++) {
+                if (friendsListLongs[i] == longUsername) {
+                    sendMessage(usernameToAdd + " is already on your friend list", 0, "");
+                    return;
                 }
             }
-        } catch (RuntimeException runtimeexception) {
-            SignLink.reportError("15283, " + b + ", " + l + ", " + runtimeexception.toString());
-            throw new RuntimeException();
+
+            for (int i = 0; i < ignoreListCount; i++) {
+                if (ignoreList[i] == longUsername) {
+                    sendMessage("Please remove " + usernameToAdd + " from your ignore list first", 0, "");
+                    return;
+                }
+            }
+
+            if (!usernameToAdd.equals(Game.localPlayer.playerName)) {
+                friendsListNames[friendsListCount] = usernameToAdd;
+                friendsListLongs[friendsListCount] = longUsername;
+                friendsListWorlds[friendsListCount] = 0;
+                friendsListCount++;
+                redrawTab = true;
+                outBuffer.putOpcode(188);
+                outBuffer.putLong(longUsername);
+            }
         }
     }
 
@@ -4084,7 +4080,7 @@ public class Game extends GameShell {
                     if (i_378_ != -1) {
                         long l = TextUtils.nameToLong(string.substring(i_378_ + 5).trim());
                         if (menuActionId == 337) {
-                            method41((byte) 68, l);
+                            addToFriendsList(l);
                         }
                         if (menuActionId == 42) {
                             addIgnore(l, 4);
@@ -5177,7 +5173,7 @@ public class Game extends GameShell {
                         redrawChatbox = true;
                         if (friendsListAction == 1) {
                             long l = TextUtils.nameToLong(chatMessage);
-                            method41((byte) 68, l);
+                            addToFriendsList(l);
                         }
                         if (friendsListAction == 2 && friendsListCount > 0) {
                             long l = TextUtils.nameToLong(chatMessage);
