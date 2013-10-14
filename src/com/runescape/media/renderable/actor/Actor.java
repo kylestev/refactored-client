@@ -44,7 +44,7 @@ public class Actor extends Renderable {
     public int faceTowardY;
     public int boundaryDimension = 1;
     public boolean aBoolean1561 = false;
-    public int anInt1562;
+    public int pathIndex;
     public int anInt1563;
     public int anInt1564;
     public int anInt1565;
@@ -82,7 +82,7 @@ public class Actor extends Renderable {
             return;
         }
         pathLength = 0;
-        anInt1562 = 0;
+        pathIndex = 0;
         anInt1523 = 0;
         pathX[0] = x;
         pathY[0] = y;
@@ -92,7 +92,7 @@ public class Actor extends Renderable {
 
     public final void resetPath() {
         pathLength = 0;
-        anInt1562 = 0;
+        pathIndex = 0;
     }
 
     public final void updateHits(int hitType, int hitDamage, int hitCycle) {

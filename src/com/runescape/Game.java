@@ -6581,7 +6581,7 @@ public class Game extends GameShell {
                         npc.anInt1548 = 0;
                         npc.animationDelay = i_516_;
                         npc.anInt1550 = 0;
-                        npc.anInt1562 = npc.pathLength;
+                        npc.pathIndex = npc.pathLength;
                     }
                 }
                 if ((i_514_ & 0x8) != 0) {
@@ -7656,11 +7656,11 @@ public class Game extends GameShell {
                 } else {
                     if (actor.animation != -1 && actor.animationDelay == 0) {
                         AnimationSequence animationsequence = AnimationSequence.cache[actor.animation];
-                        if (actor.anInt1562 > 0 && animationsequence.anInt61 == 0) {
+                        if (actor.pathIndex > 0 && animationsequence.anInt61 == 0) {
                             actor.anInt1523++;
                             break;
                         }
-                        if (actor.anInt1562 <= 0 && animationsequence.priority == 0) {
+                        if (actor.pathIndex <= 0 && animationsequence.priority == 0) {
                             actor.anInt1523++;
                             break;
                         }
@@ -7756,10 +7756,10 @@ public class Game extends GameShell {
                             break;
                         }
                         actor.pathLength--;
-                        if (actor.anInt1562 <= 0) {
+                        if (actor.pathIndex <= 0) {
                             break;
                         }
-                        actor.anInt1562--;
+                        actor.pathIndex--;
                     }
                 }
             } catch (RuntimeException runtimeexception) {
@@ -7872,7 +7872,7 @@ public class Game extends GameShell {
                 }
                 if (actor.animation != -1 && actor.animationDelay <= 1) {
                     AnimationSequence animationsequence = AnimationSequence.cache[actor.animation];
-                    if (animationsequence.anInt61 == 1 && actor.anInt1562 > 0 && actor.anInt1567 <= Game.currentCycle
+                    if (animationsequence.anInt61 == 1 && actor.pathIndex > 0 && actor.anInt1567 <= Game.currentCycle
                             && actor.anInt1568 < Game.currentCycle) {
                         actor.animationDelay = 1;
                         break;
@@ -8641,7 +8641,7 @@ public class Game extends GameShell {
                         player.anInt1548 = 0;
                         player.animationDelay = animationDelay;
                         player.anInt1550 = 0;
-                        player.anInt1562 = player.pathLength;
+                        player.pathIndex = player.pathLength;
                     }
                 }
 
