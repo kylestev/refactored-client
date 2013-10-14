@@ -39,7 +39,7 @@ public class ChatCensor {
 			Buffer topLevelDomainsBuffer) {
 		ChatCensor.loadBadEnc(badEnc);
 		ChatCensor.loadDomainEnc(domainEnc);
-		ChatCensor.loadFragmentsEnc(fragmentsEnc, true);
+		ChatCensor.loadFragmentsEnc(fragmentsEnc);
 		ChatCensor.loadTopLevelDomains(topLevelDomainsBuffer);
 	}
 
@@ -70,7 +70,7 @@ public class ChatCensor {
 		ChatCensor.loadDomains(ChatCensor.domains, buffer);
 	}
 
-	private static final void loadFragmentsEnc(Buffer buffer, boolean bool) {
+	private static final void loadFragmentsEnc(Buffer buffer) {
 		ChatCensor.fragments = new int[buffer.getInt()];
 		for (int index = 0; index < ChatCensor.fragments.length; index++) {
 			ChatCensor.fragments[index] = buffer.getUnsignedLEShort();
