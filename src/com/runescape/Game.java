@@ -8663,7 +8663,7 @@ public class Game extends GameShell {
                     int playerRights = buffer.getUnsignedByte();
                     int chatTextLength = buffer.getUnsignedByteC();
                     int originalOffset = buffer.offset;
-                    if (player.playerName != null && player.visibile) {
+                    if (player.playerName != null && player.visible) {
                         long l = TextUtils.nameToLong(player.playerName);
                         boolean bool = false;
                         if (playerRights <= 1) {

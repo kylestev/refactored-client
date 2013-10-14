@@ -27,7 +27,7 @@ public class Player extends Actor {
     public int anInt1727;
     public int anInt1728;
     public int anInt1729;
-    public boolean visibile = false;
+    public boolean visible = false;
     public int anInt1731;
     public int anInt1732;
     public int anInt1733;
@@ -42,7 +42,7 @@ public class Player extends Actor {
 
     @Override
     public final Model getRotatedModel() {
-        if (!visibile) {
+        if (!visible) {
             return null;
         }
         Model animatedModel = getAnimatedModel();
@@ -173,7 +173,7 @@ public class Player extends Actor {
         playerName = TextUtils.formatName(TextUtils.longToName(buffer.getLong()));
         combatLevel = buffer.getUnsignedByte();
         anInt1743 = buffer.getUnsignedLEShort();
-        visibile = true;
+        visible = true;
         appearanceOffset = 0L;
         for (int index = 0; index < 12; index++) {
             appearanceOffset <<= 4;
@@ -312,14 +312,14 @@ public class Player extends Actor {
 
     @Override
     public final boolean isVisible() {
-        if (!visibile) {
+        if (!visible) {
             return false;
         }
         return true;
     }
 
     public final Model getHeadModel() {
-        if (!visibile) {
+        if (!visible) {
             return null;
         }
         if (npcDefinition != null) {
