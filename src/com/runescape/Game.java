@@ -253,7 +253,7 @@ public class Game extends GameShell {
     private int walkableWidgetId = -1;
     private static int[] xpForSkillLevel = new int[99];
     private int minimapState;
-    protected int anInt1047;
+    protected int clickedCurrentCoordinatesCount;
     private int anInt1048;
     private IndexedImage scrollbarUp;
     private IndexedImage scrollbarDown;
@@ -453,8 +453,8 @@ public class Game extends GameShell {
     private int[] anIntArray1259;
     private int[] anIntArray1260;
     private int[] anIntArray1261;
-    protected int anInt1262;
-    protected int anInt1263;
+    protected int _mouseX;
+    protected int _mouseY;
     private final int[] anIntArray1265 = new int[100];
     private final int[] trackLoop = new int[50];
     private boolean aBoolean1267 = false;
@@ -3208,76 +3208,89 @@ public class Game extends GameShell {
                         break;
                     }
                 }
+
                 if (loggedIn) {
                     synchronized (mouseCapturer.objectLock) {
                         if (Game.flagged) {
-                            if (clickType != 0 || mouseCapturer.coord >= 40) {
+                            if (clickType != 0 || mouseCapturer.capturedEvents >= 40) {
                                 outBuffer.putOpcode(45);
                                 outBuffer.put(0);
+
                                 int offset = outBuffer.offset;
-                                int i_306_ = 0;
-                                for (int i_307_ = 0; i_307_ < mouseCapturer.coord; i_307_++) {
+                                int captured = 0;
+                                for (int i = 0; i < mouseCapturer.capturedEvents; i++) {
                                     if (offset - outBuffer.offset >= 240) {
                                         break;
                                     }
-                                    i_306_++;
-                                    int i_308_ = mouseCapturer.coordsY[i_307_];
-                                    if (i_308_ < 0) {
-                                        i_308_ = 0;
-                                    } else if (i_308_ > 502) {
-                                        i_308_ = 502;
+
+                                    captured++;
+
+                                    int y = mouseCapturer.coordsY[i];
+                                    if (y < 0) {
+                                        y = 0;
+                                    } else if (y > 502) {
+                                        y = 502;
                                     }
-                                    int i_309_ = mouseCapturer.coordsX[i_307_];
-                                    if (i_309_ < 0) {
-                                        i_309_ = 0;
-                                    } else if (i_309_ > 764) {
-                                        i_309_ = 764;
+
+                                    int x = mouseCapturer.coordsX[i];
+                                    if (x < 0) {
+                                        x = 0;
+                                    } else if (x > 764) {
+                                        x = 764;
                                     }
-                                    int i_310_ = i_308_ * 765 + i_309_;
-                                    if (mouseCapturer.coordsY[i_307_] == -1 && mouseCapturer.coordsX[i_307_] == -1) {
-                                        i_309_ = -1;
-                                        i_308_ = -1;
-                                        i_310_ = 524287;
+
+                                    int packedCoords = y * 765 + x;
+                                    if (mouseCapturer.coordsY[i] == -1 && mouseCapturer.coordsX[i] == -1) {
+                                        x = -1;
+                                        y = -1;
+
+                                        final int MOUSE_OFF_SCREEN = 524287;
+                                        packedCoords = MOUSE_OFF_SCREEN;
                                     }
-                                    if (i_309_ == anInt1262 && i_308_ == anInt1263) {
-                                        if (anInt1047 < 2047) {
-                                            anInt1047++;
+
+                                    if (x == _mouseX && y == _mouseY) {
+                                        if (clickedCurrentCoordinatesCount < 2047) {
+                                            clickedCurrentCoordinatesCount++;
                                         }
                                     } else {
-                                        int i_311_ = i_309_ - anInt1262;
-                                        anInt1262 = i_309_;
-                                        int i_312_ = i_308_ - anInt1263;
-                                        anInt1263 = i_308_;
-                                        if (anInt1047 < 8 && i_311_ >= -32 && i_311_ <= 31 && i_312_ >= -32
-                                                && i_312_ <= 31) {
-                                            i_311_ += 32;
-                                            i_312_ += 32;
-                                            outBuffer.putShort((anInt1047 << 12) + (i_311_ << 6) + i_312_);
-                                            anInt1047 = 0;
-                                        } else if (anInt1047 < 8) {
-                                            outBuffer.put24BitInt(8388608 + (anInt1047 << 19) + i_310_);
-                                            anInt1047 = 0;
+                                        int diffX = x - _mouseX;
+                                        int diffY = y - _mouseY;
+
+                                        _mouseX = x;
+                                        _mouseY = y;
+
+                                        if (clickedCurrentCoordinatesCount < 8 && diffX >= -32 && diffX <= 31 && diffY >= -32 && diffY <= 31) {
+                                            diffX += 32;
+                                            diffY += 32;
+                                            outBuffer.putShort((clickedCurrentCoordinatesCount << 12) + (diffX << 6) + diffY);
+                                            clickedCurrentCoordinatesCount = 0;
+                                        } else if (clickedCurrentCoordinatesCount < 8) {
+                                            outBuffer.put24BitInt(8388608 + (clickedCurrentCoordinatesCount << 19) + packedCoords);
+                                            clickedCurrentCoordinatesCount = 0;
                                         } else {
-                                            outBuffer.putInt(-1073741824 + (anInt1047 << 19) + i_310_);
-                                            anInt1047 = 0;
+                                            outBuffer.putInt(-1073741824 + (clickedCurrentCoordinatesCount << 19) + packedCoords);
+                                            clickedCurrentCoordinatesCount = 0;
                                         }
                                     }
                                 }
+
                                 outBuffer.putSizeByte(outBuffer.offset - offset);
-                                if (i_306_ >= mouseCapturer.coord) {
-                                    mouseCapturer.coord = 0;
+
+                                if (captured >= mouseCapturer.capturedEvents) {
+                                    mouseCapturer.capturedEvents = 0;
                                 } else {
-                                    mouseCapturer.coord -= i_306_;
-                                    for (int i_313_ = 0; i_313_ < mouseCapturer.coord; i_313_++) {
-                                        mouseCapturer.coordsX[i_313_] = mouseCapturer.coordsX[i_313_ + i_306_];
-                                        mouseCapturer.coordsY[i_313_] = mouseCapturer.coordsY[i_313_ + i_306_];
+                                    mouseCapturer.capturedEvents -= captured;
+                                    for (int i = 0; i < mouseCapturer.capturedEvents; i++) {
+                                        mouseCapturer.coordsX[i] = mouseCapturer.coordsX[i + captured];
+                                        mouseCapturer.coordsY[i] = mouseCapturer.coordsY[i + captured];
                                     }
                                 }
                             }
                         } else {
-                            mouseCapturer.coord = 0;
+                            mouseCapturer.capturedEvents = 0;
                         }
                     }
+
                     if (clickType != 0) {
                         long l = (clickTime - aLong1245) / 50L;
                         if (l > 4095L) {
@@ -6133,8 +6146,8 @@ public class Game extends GameShell {
                 playerRights = bufferedConnection.read();
                 Game.flagged = bufferedConnection.read() == 1;
                 aLong1245 = 0L;
-                anInt1047 = 0;
-                mouseCapturer.coord = 0;
+                clickedCurrentCoordinatesCount = 0;
+                mouseCapturer.capturedEvents = 0;
                 awtFocus = true;
                 aBoolean979 = true;
                 loggedIn = true;

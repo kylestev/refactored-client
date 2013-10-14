@@ -9,16 +9,16 @@ public class MouseCapturer implements Runnable {
     public int[] coordsY = new int[500];
     public boolean capturing = true;
     public int[] coordsX = new int[500];
-    public int coord;
+    public int capturedEvents;
 
     @Override
     public void run() {
         while (capturing) {
             synchronized (objectLock) {
-                if (coord < 500) {
-                    coordsX[coord] = client.mouseEventX;
-                    coordsY[coord] = client.mouseEventY;
-                    coord++;
+                if (capturedEvents < 500) {
+                    coordsX[capturedEvents] = client.mouseEventX;
+                    coordsY[capturedEvents] = client.mouseEventY;
+                    capturedEvents++;
                 }
             }
             try {
