@@ -289,7 +289,7 @@ public class Game extends GameShell {
     private final int[] anIntArray1082 = new int[33];
     private final Widget aWidget1084 = new Widget();
     private IndexedImage[] anIndexedImageArray1085 = new IndexedImage[100];
-    static int anInt1086;
+    static int drawCycle;
     private int trackCount;
     private final int anInt1088 = 5063219;
     private int friendsListAction;
@@ -427,7 +427,7 @@ public class Game extends GameShell {
     public static final int[] anIntArray1229;
     public static boolean flagged;
     private final int[] trackIds = new int[50];
-    private int anInt1233;
+    private int flameCycle;
     private int anInt1234;
     private int anInt1235 = 2;
     private int anInt1236 = 78;
@@ -5112,19 +5112,23 @@ public class Game extends GameShell {
         System.gc();
     }
 
-    public void method72() {
+    public void printDebug() {
         System.out.println("============");
-        System.out.println("flame-cycle:" + anInt1233);
+        System.out.println("flame-cycle:" + flameCycle);
+
         if (onDemandRequester != null) {
             System.out.println("Od-cycle:" + onDemandRequester.cycle);
         }
+
         System.out.println("loop-cycle:" + Game.currentCycle);
-        System.out.println("draw-cycle:" + Game.anInt1086);
+        System.out.println("draw-cycle:" + Game.drawCycle);
         System.out.println("ptype:" + opcode);
         System.out.println("psize:" + packetSize);
+
         if (bufferedConnection != null) {
             bufferedConnection.printDebug();
         }
+
         dumpRequested = true;
     }
 
@@ -5259,7 +5263,7 @@ public class Game extends GameShell {
                                 dropClient();
                             }
                             if (chatboxInput.equals("::lag")) {
-                                method72();
+                                printDebug();
                             }
                             if (chatboxInput.equals("::prefetchmusic")) {
                                 for (int i_417_ = 0; i_417_ < onDemandRequester.fileCount(2); i_417_++) {
@@ -8850,7 +8854,7 @@ public class Game extends GameShell {
         if (aBoolean1277 || aBoolean951 || aBoolean1201) {
             displayLoadingError(-13873);
         } else {
-            Game.anInt1086++;
+            Game.drawCycle++;
             if (!loggedIn) {
                 drawLoginScreen(false);
             } else {
@@ -10124,7 +10128,7 @@ public class Game extends GameShell {
                 int i = 0;
                 int i_866_ = 20;
                 while (aBoolean856) {
-                    anInt1233++;
+                    flameCycle++;
                     drawFlames();
                     drawFlames();
                     method133();
