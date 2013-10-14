@@ -280,7 +280,7 @@ public class Game extends GameShell {
     private int anInt1071;
     private boolean characterEditChangeGender = true;
     private int anInt1073;
-    private String aString1074;
+    private String loadStatusMessage;
     private static int anInt1076;
     private final int[] anIntArray1077 = new int[151];
     private Archive anArchive1078;
@@ -308,7 +308,7 @@ public class Game extends GameShell {
     private ImageRGB mapdotPlayer;
     private ImageRGB mapdotFriend;
     private ImageRGB mapdotTeammate;
-    private int anInt1104;
+    private int loadPercentage;
     private boolean aBoolean1105 = false;
     private final int anInt1106 = -733;
     private String[] friendsListNames = new String[200];
@@ -3612,13 +3612,13 @@ public class Game extends GameShell {
     }
 
     @Override
-    public final void drawLoadingText(int i, String string) {
+    public final void drawLoadingText(final int loadPercentage, final String statusMessage) {
         do {
-            anInt1104 = i;
-            aString1074 = string;
+            this.loadPercentage = loadPercentage;
+            this.loadStatusMessage = statusMessage;
             method64();
             if (anArchive1078 == null) {
-                super.drawLoadingText(i, string);
+                super.drawLoadingText(loadPercentage, statusMessage);
             } else {
                 aProducingGraphicsBuffer1134.createRasterizer();
                 int i_330_ = 360;
@@ -3629,9 +3629,9 @@ public class Game extends GameShell {
                 int i_333_ = i_331_ / 2 - 18 - i_332_;
                 Rasterizer.drawUnfilledRectangle(i_330_ / 2 - 152, i_333_, 304, 34, 9179409);
                 Rasterizer.drawUnfilledRectangle(i_330_ / 2 - 151, i_333_ + 1, 302, 32, 0);
-                Rasterizer.drawFilledRectangle(i_330_ / 2 - 150, i_333_ + 2, i * 3, 30, 9179409);
-                Rasterizer.drawFilledRectangle(i_330_ / 2 - 150 + i * 3, i_333_ + 2, 300 - i * 3, 30, 0);
-                fontBold.drawStringLeft(string, i_330_ / 2, i_331_ / 2 + 5 - i_332_, 0xFFFFFF);
+                Rasterizer.drawFilledRectangle(i_330_ / 2 - 150, i_333_ + 2, loadPercentage * 3, 30, 9179409);
+                Rasterizer.drawFilledRectangle(i_330_ / 2 - 150 + loadPercentage * 3, i_333_ + 2, 300 - loadPercentage * 3, 30, 0);
+                fontBold.drawStringLeft(statusMessage, i_330_ / 2, i_331_ / 2 + 5 - i_332_, 0xFFFFFF);
                 aProducingGraphicsBuffer1134.drawGraphics(202, 171, gameGraphics);
                 if (!redraw) {
                     break;
@@ -7286,7 +7286,7 @@ public class Game extends GameShell {
             GameObjectDefinition.client = this;
             ActorDefinition.client = this;
         } catch (Exception exception) {
-            SignLink.reportError("loaderror " + aString1074 + " " + anInt1104);
+            SignLink.reportError("loaderror " + loadStatusMessage + " " + loadPercentage);
             aBoolean951 = true;
         }
     }
