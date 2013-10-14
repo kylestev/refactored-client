@@ -4085,7 +4085,7 @@ public class Game extends GameShell {
                             removeFriend(l);
                         }
                         if (menuActionId == 322) {
-                            method122(3, l);
+                            removeIgnore(3, l);
                         }
                     }
                 }
@@ -5200,7 +5200,7 @@ public class Game extends GameShell {
                         }
                         if (friendsListAction == 5 && ignoreListCount > 0) {
                             long l = TextUtils.nameToLong(chatMessage);
-                            method122(3, l);
+                            removeIgnore(3, l);
                         }
                     }
                 } else if (inputType == 1) {
@@ -9394,28 +9394,24 @@ public class Game extends GameShell {
         }
     }
 
-    public final void method122(int i, long l) {
-        try {
-            if (i != 3) {
-                startup();
-            }
-            if (l != 0L) {
-                for (int i_759_ = 0; i_759_ < ignoreListCount; i_759_++) {
-                    if (ignoreList[i_759_] == l) {
-                        ignoreListCount--;
-                        redrawTab = true;
-                        for (int i_760_ = i_759_; i_760_ < ignoreListCount; i_760_++) {
-                            ignoreList[i_760_] = ignoreList[i_760_ + 1];
-                        }
-                        outBuffer.putOpcode(74);
-                        outBuffer.putLong(l);
-                        break;
-                    }
+    public final void removeIgnore(final long usernameLong) {
+        if (usernameLong == 0L) {
+            return;
+        }
+
+        for (int i = 0; i < ignoreListCount; i++) {
+            if (ignoreList[i] == usernameLong) {
+                ignoreListCount--;
+                redrawTab = true;
+
+                for (int j = i; j < ignoreListCount; j++) {
+                    ignoreList[j] = ignoreList[j + 1];
                 }
+
+                outBuffer.putOpcode(74);
+                outBuffer.putLong(usernameLong);
+                break;
             }
-        } catch (RuntimeException runtimeexception) {
-            SignLink.reportError("47229, " + i + ", " + l + ", " + runtimeexception.toString());
-            throw new RuntimeException();
         }
     }
 
