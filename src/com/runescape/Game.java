@@ -2209,7 +2209,7 @@ public class Game extends GameShell {
         }
     }
 
-    public final void addToFriendsList(final long longUsername) {
+    public final void addFriend(final long longUsername) {
         if (longUsername == 0L) {
             return;
         }
@@ -4076,7 +4076,7 @@ public class Game extends GameShell {
                     if (i_378_ != -1) {
                         long l = TextUtils.nameToLong(string.substring(i_378_ + 5).trim());
                         if (menuActionId == 337) {
-                            addToFriendsList(l);
+                            addFriend(l);
                         }
                         if (menuActionId == 42) {
                             addIgnore(l, 4);
@@ -5169,7 +5169,7 @@ public class Game extends GameShell {
                         redrawChatbox = true;
                         if (friendsListAction == 1) {
                             long l = TextUtils.nameToLong(chatMessage);
-                            addToFriendsList(l);
+                            addFriend(l);
                         }
                         if (friendsListAction == 2 && friendsListCount > 0) {
                             long l = TextUtils.nameToLong(chatMessage);
