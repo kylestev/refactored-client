@@ -130,27 +130,32 @@ public class ChatCensor {
 		return true;
 	}
 
-	public static final String censorString(String string) {
+	public static final String censorString(final String string) {
 		char[] censoredString = string.toCharArray();
 		ChatCensor.formatLegalCharacters(censoredString);
-		String censoredStringTrimmed = new String(censoredString).trim();
-		censoredString = censoredStringTrimmed.toLowerCase().toCharArray();
-		String censoredStringLowercased = censoredStringTrimmed.toLowerCase();
+
+		final String censoredStringTrimmed = new String(censoredString).trim();
+        final String censoredStringLowercased = censoredStringTrimmed.toLowerCase();
+        censoredString = censoredStringTrimmed.toLowerCase().toCharArray();
+
 		ChatCensor.method193(false, censoredString);
 		ChatCensor.method188(censoredString, true);
 		ChatCensor.method189((byte) 0, censoredString);
 		ChatCensor.method202(censoredString, -511);
-		for (String element : ChatCensor.aStringArray175) {
-			int i_21_ = -1;
-			while ((i_21_ = censoredStringLowercased.indexOf(element, i_21_ + 1)) != -1) {
-				char[] cs_22_ = element.toCharArray();
-				for (int i_23_ = 0; i_23_ < cs_22_.length; i_23_++) {
-					censoredString[i_23_ + i_21_] = cs_22_[i_23_];
+
+		for (String allowedWord : ChatCensor.aStringArray175) {
+			int idx = -1;
+			while ((idx = censoredStringLowercased.indexOf(allowedWord, idx + 1)) != -1) {
+				final char[] chars = allowedWord.toCharArray();
+				for (int i = 0; i < chars.length; i++) {
+					censoredString[i + idx] = chars[i];
 				}
 			}
 		}
+
 		ChatCensor.method186(censoredStringTrimmed.toCharArray(), 2, censoredString);
 		ChatCensor.method187(0, censoredString);
+
 		return new String(censoredString).trim();
 	}
 
