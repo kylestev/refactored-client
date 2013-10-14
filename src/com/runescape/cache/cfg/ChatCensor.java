@@ -79,16 +79,19 @@ public class ChatCensor {
 
 	private static final void loadBadWords(Buffer buffer, char[][] badWords, byte[][][] badBytes) {
 		for (int index = 0; index < badWords.length; index++) {
-			char[] badWord = new char[buffer.getUnsignedByte()];
-			for (int i_10_ = 0; i_10_ < badWord.length; i_10_++) {
-				badWord[i_10_] = (char) buffer.getUnsignedByte();
+			final char[] badWord = new char[buffer.getUnsignedByte()];
+			for (int i = 0; i < badWord.length; i++) {
+				badWord[i] = (char) buffer.getUnsignedByte();
 			}
-			badWords[index] = badWord;
-			byte[][] badByte = new byte[buffer.getUnsignedByte()][2];
-			for (int i_12_ = 0; i_12_ < badByte.length; i_12_++) {
-				badByte[i_12_][0] = (byte) buffer.getUnsignedByte();
-				badByte[i_12_][1] = (byte) buffer.getUnsignedByte();
+
+            badWords[index] = badWord;
+            final byte[][] badByte = new byte[buffer.getUnsignedByte()][2];
+
+			for (int i = 0; i < badByte.length; i++) {
+				badByte[i][0] = (byte) buffer.getUnsignedByte();
+				badByte[i][1] = (byte) buffer.getUnsignedByte();
 			}
+
 			if (badByte.length > 0) {
 				badBytes[index] = badByte;
 			}
