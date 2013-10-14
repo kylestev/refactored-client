@@ -645,7 +645,7 @@ public class Game extends GameShell {
                         }
                         if ((chatboxMessageType == 1 || chatboxMessageType == 2)
                                 && (chatboxMessageType == 1 || publicChatSetting == 0 || publicChatSetting == 1
-                                && method109(false, chatboxMessageName))) {
+                                && isUsernameFriendOrSelf(chatboxMessageName))) {
                             if (i_14_ > 0 && i_14_ < 110) {
                                 int i_16_ = 4;
                                 if (playerRights == 1) {
@@ -665,7 +665,7 @@ public class Game extends GameShell {
                         if ((chatboxMessageType == 3 || chatboxMessageType == 7)
                                 && anInt1220 == 0
                                 && (chatboxMessageType == 7 || privateChatSetting == 0 || privateChatSetting == 1
-                                && method109(false, chatboxMessageName))) {
+                                && isUsernameFriendOrSelf(chatboxMessageName))) {
                             if (i_14_ > 0 && i_14_ < 110) {
                                 int i_17_ = 4;
                                 typeFace.drawString("From", i_17_, i_14_, 0);
@@ -685,7 +685,7 @@ public class Game extends GameShell {
                             i++;
                         }
                         if (chatboxMessageType == 4
-                                && (tradeSetting == 0 || tradeSetting == 1 && method109(false, chatboxMessageName))) {
+                                && (tradeSetting == 0 || tradeSetting == 1 && isUsernameFriendOrSelf(chatboxMessageName))) {
                             if (i_14_ > 0 && i_14_ < 110) {
                                 typeFace.drawString(chatboxMessageName + " " + chatboxMessages[chatboxMessage], 4,
                                         i_14_, 8388736);
@@ -707,7 +707,7 @@ public class Game extends GameShell {
                             i++;
                         }
                         if (chatboxMessageType == 8
-                                && (tradeSetting == 0 || tradeSetting == 1 && method109(false, chatboxMessageName))) {
+                                && (tradeSetting == 0 || tradeSetting == 1 && isUsernameFriendOrSelf(chatboxMessageName))) {
                             if (i_14_ > 0 && i_14_ < 110) {
                                 typeFace.drawString(chatboxMessageName + " " + chatboxMessages[chatboxMessage], 4,
                                         i_14_, 8270336);
@@ -1731,7 +1731,7 @@ public class Game extends GameShell {
                     }
                     if (actor.forcedChat != null
                             && (i_143_ >= playerCount || publicChatSetting == 0 || publicChatSetting == 3 || publicChatSetting == 1
-                            && method109(false, ((Player) actor).playerName))) {
+                            && isUsernameFriendOrSelf(((Player) actor).playerName))) {
                         method127(actor, actor.modelHeight);
                         if (anInt988 > -1 && anInt999 < anInt1000) {
                             anIntArray1004[anInt999] = fontBold.getStringWidth(actor.forcedChat) / 2;
@@ -5405,7 +5405,7 @@ public class Game extends GameShell {
                     }
                     if ((i_428_ == 1 || i_428_ == 2)
                             && (i_428_ == 1 || publicChatSetting == 0 || publicChatSetting == 1
-                            && method109(false, name))) {
+                            && isUsernameFriendOrSelf(name))) {
                         if (i_424_ > i_429_ - 14 && i_424_ <= i_429_ && !name.equals(Game.localPlayer.playerName)) {
                             if (playerRights >= 1) {
                                 menuActionNames[menuActionRow] = "Report abuse @whi@" + name;
@@ -5424,7 +5424,7 @@ public class Game extends GameShell {
                     if ((i_428_ == 3 || i_428_ == 7)
                             && anInt1220 == 0
                             && (i_428_ == 7 || privateChatSetting == 0 || privateChatSetting == 1
-                            && method109(false, name))) {
+                            && isUsernameFriendOrSelf(name))) {
                         if (i_424_ > i_429_ - 14 && i_424_ <= i_429_) {
                             if (playerRights >= 1) {
                                 menuActionNames[menuActionRow] = "Report abuse @whi@" + name;
@@ -5440,7 +5440,7 @@ public class Game extends GameShell {
                         }
                         i_426_++;
                     }
-                    if (i_428_ == 4 && (tradeSetting == 0 || tradeSetting == 1 && method109(false, name))) {
+                    if (i_428_ == 4 && (tradeSetting == 0 || tradeSetting == 1 && isUsernameFriendOrSelf(name))) {
                         if (i_424_ > i_429_ - 14 && i_424_ <= i_429_) {
                             menuActionNames[menuActionRow] = "Accept trade @whi@" + name;
                             menuActionIds[menuActionRow] = 484;
@@ -5451,7 +5451,7 @@ public class Game extends GameShell {
                     if ((i_428_ == 5 || i_428_ == 6) && anInt1220 == 0 && privateChatSetting < 2) {
                         i_426_++;
                     }
-                    if (i_428_ == 8 && (tradeSetting == 0 || tradeSetting == 1 && method109(false, name))) {
+                    if (i_428_ == 8 && (tradeSetting == 0 || tradeSetting == 1 && isUsernameFriendOrSelf(name))) {
                         if (i_424_ > i_429_ - 14 && i_424_ <= i_429_) {
                             menuActionNames[menuActionRow] = "Accept challenge @whi@" + name;
                             menuActionIds[menuActionRow] = 6;
@@ -5742,7 +5742,7 @@ public class Game extends GameShell {
                         }
                         if ((type == 3 || type == 7)
                                 && (type == 7 || privateChatSetting == 0 || privateChatSetting == 1
-                                && method109(false, name))) {
+                                && isUsernameFriendOrSelf(name))) {
                             int y = 329 - row * 13;
                             int x = 4;
                             font.drawString("From", x, y, 0);
@@ -8855,27 +8855,22 @@ public class Game extends GameShell {
         }
     }
 
-    public final boolean method109(boolean bool, String string) {
-        try {
-            if (string == null) {
-                return false;
-            }
-            for (int i = 0; i < friendsListCount; i++) {
-                if (string.equalsIgnoreCase(friendsListNames[i])) {
-                    return true;
-                }
-            }
-            if (bool) {
-                outBuffer.put(138);
-            }
-            if (string.equalsIgnoreCase(Game.localPlayer.playerName)) {
+    public final boolean isUsernameFriendOrSelf(final String _username) {
+        if (_username == null) {
+            return false;
+        }
+
+        for (int i = 0; i < friendsListCount; i++) {
+            if (_username.equalsIgnoreCase(friendsListNames[i])) {
                 return true;
             }
-            return false;
-        } catch (RuntimeException runtimeexception) {
-            SignLink.reportError("24883, " + bool + ", " + string + ", " + runtimeexception.toString());
-            throw new RuntimeException();
         }
+
+        if (_username.equalsIgnoreCase(Game.localPlayer.playerName)) {
+            return true;
+        }
+
+        return false;
     }
 
     public static final String method110(int i, int i_710_, boolean bool) {
@@ -9767,7 +9762,7 @@ public class Game extends GameShell {
                         }
                         if ((messageType == 3 || messageType == 7)
                                 && (messageType == 7 || privateChatSetting == 0 || privateChatSetting == 1
-                                && method109(false, name))) {
+                                && isUsernameFriendOrSelf(name))) {
                             int areaHeight = 329 - (lineId * 13);
                             if (mouseEventX > 4 && mouseEventY - 4 > areaHeight - 10
                                     && mouseEventY - 4 <= areaHeight + 3) {
