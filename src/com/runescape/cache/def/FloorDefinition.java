@@ -147,20 +147,19 @@ public class FloorDefinition {
         hslColor2 = shiftHSLColors(huerand, satrand, lightrand);
     }
 
-    private final int shiftHSLColors(int i, int i_17_, int i_18_) {
-        if (i_18_ > 179) {
-            i_17_ /= 2;
+    private final int shiftHSLColors(int hue, int sat, int light) {
+        if (light > 179) {
+            sat /= 2;
         }
-        if (i_18_ > 192) {
-            i_17_ /= 2;
+        if (light > 192) {
+            sat /= 2;
         }
-        if (i_18_ > 217) {
-            i_17_ /= 2;
+        if (light > 217) {
+            sat /= 2;
         }
-        if (i_18_ > 243) {
-            i_17_ /= 2;
+        if (light > 243) {
+            sat /= 2;
         }
-        int i_19_ = (i / 4 << 10) + (i_17_ / 32 << 7) + i_18_ / 2;
-        return i_19_;
+        return (hue / 4 << 10) + (sat / 32 << 7) + light / 2;
     }
 }
